@@ -1,0 +1,83 @@
+{
+    "FieldLabels": {
+        "Employer": {
+            "Employer": "Employer",
+            "Local": "Local",
+            "Subunit": "Subunit"
+        },
+
+        "Reporter": {
+            "Header": "Reporting for Unit",
+            "Reporter": "Full Name",
+            "Email": "Email",
+            "Phone": "Phone"
+        },
+
+        "UnitStatus": {
+            "Header": "Unit Status",
+            "QuestionActive": "Has this unit been deactivated or decertified?",
+            "MemberCount": "Number of members",
+            "ContractDates": {
+                "Start": "Latest CBA Start",
+                "End": "Latest CBA End"
+            },
+            "CBAUpload": "Upload Latest CBA",
+            "QuestionWages": "Did this unit receive any wage increases or decreases between 8/1/22 - 7/31/23?",
+            "QuestionBargaining": "Is this unit still bargaining for any part of the 8/1/22 - 7/31/23 period?"         
+        },
+
+        "AcrossTheBoard": {
+            "Header": "Across the Board Increases / Decreases"
+        },
+
+        "SpecialIncreases": {
+            "Header": "Special Increases / Decreases",
+            "QuestionSpecialRaise": "Did any part of the unit receive special pay increases or decreases in addtion to the across the board increases / decreases reported above?"
+        },
+
+        "RaiseFields": {
+            "EffectiveDate": "Effective Date",
+            "SelectRaise": "Select Raise Event",
+            "RaiseEventOptions": {
+                "PercentIncrease": "% Increase",
+                "PercentDecrease": "% Decrease",
+                "HourlyIncrease": "Hourly Increase",
+                "HourlyDecrease": "Hourly Decrease",
+                "LumpSum": "Lump Sum/Bonus"
+            },
+            "IncreasePercent": "Increase %",
+            "DecreasePercent": "Decrease %",
+            "IncreaseAmount": "Increase Amount",
+            "DecreaseAmount": "Decrease Amount",
+            "StartingAnnual": "Starting Annual",
+            "StartingHourly": "Starting Hourly",
+            "NumberAffected": "Number Affected",
+            "Description": "Describe group receiving this special increase/decrease",
+            "FileUpload": "Upload supporting documentation",
+            "AddRegularRaise": "Add General Increase / Decrease",
+            "AddSpecialRaise": "Add Special Increase / Decrease"
+        },
+
+        "Comments":{
+            "Header": "Comments",
+            "QuestionComments": "Is there any other info we need to properly record the report for this unit?"
+        },
+        
+        "Errors": {
+            
+        },
+
+        "Footer": {
+            "Email": "minimumdues@afscme.org",
+            "Phone": "202-429-1219"
+        },
+
+        "InputFieldSettings" : {
+            "date": {
+                "min": "2022-08-01",
+                "max": "2023-07-31"
+            }
+        }
+
+    }
+}

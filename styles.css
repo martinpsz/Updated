@@ -1,0 +1,23 @@
+
+*, *::before, *::after{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html{
+    --font-family: 'Poppins', sans-serif;
+    --green: 8,172,82;
+    --white: 252, 252, 252;
+    --red: 164, 14, 76;
+    --black: 21, 50, 67;
+    --blue: 5, 87, 164;
+}
+
+body{
+    background: rgb(var(--white));
+    height: 100%;
+    max-width: 1280px;
+    margin: 0 auto;
+}
+

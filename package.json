@@ -1,0 +1,36 @@
+{
+  "name": "affiliate-interface",
+  "version": "1.0.0",
+  "description": "This is a form for AFSCME affiliates to report stats on their membership",
+  "main": "index.js",
+  "scripts": {
+    "dev": "vite --host",
+    "build": "vite build",
+    "preview": "vite preview",
+    "storybook": "start-storybook -p 6006",
+    "build-storybook": "build-storybook"
+  },
+  "author": "Martin Pszczola",
+  "license": "ISC",
+  "devDependencies": {
+    "@babel/core": "^7.21.3",
+    "@rollup/plugin-commonjs": "^24.0.1",
+    "@rollup/plugin-node-resolve": "^15.0.1",
+    "@storybook/addon-actions": "^6.5.16",
+    "@storybook/addon-essentials": "^6.5.16",
+    "@storybook/addon-links": "^6.5.16",
+    "@storybook/addon-storysource": "^6.5.16",
+    "@storybook/builder-vite": "^0.4.2",
+    "@storybook/web-components": "^6.5.16",
+    "@types/node": "^18.15.11",
+    "babel-loader": "^8.3.0",
+    "typescript": "^5.0.2",
+    "vite": "^4.2.1",
+    "vite-plugin-legacy": "^2.1.0"
+  },
+  "dependencies": {
+    "@vitejs/plugin-legacy": "^4.0.2",
+    "lit": "^2.7.0",
+    "lit-html": "^2.7.0"
+  }
+}
