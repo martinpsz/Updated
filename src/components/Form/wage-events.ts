@@ -1,4 +1,4 @@
-import {LitElement, html, css, nothing}  from 'lit';
+import {LitElement, html, css, nothing, TemplateResult}  from 'lit';
 import {customElement, property, state} from 'lit/decorators.js';
 import '../atoms/input-field';
 import '../atoms/raise-select';
@@ -104,10 +104,10 @@ export class WageEvents extends LitElement {
     _raiseType!: "% increase" | "% decrease" | "hourly increase" | "hourly decrease" | "lump sum/bonus";
 
     @state()
-    _regularWageEvents: WageEvent[] = [];
+    _regularWageEvents: Array<TemplateResult> = [] ;
 
     @state()
-    _specialWageEvents: WageEvent[] = [];
+    _specialWageEvents: Array<TemplateResult> = [];
 
     constructor(){
         super();
@@ -116,6 +116,7 @@ export class WageEvents extends LitElement {
 
 
     protected render(){
+        console.log(this._regularWageEvents)
         return html`
             <div class="wage-event ${this.specialRaise && 'special-raise'}">
                 <input-field label=${FieldLabels.RaiseFields.EffectiveDate} 
@@ -151,11 +152,6 @@ export class WageEvents extends LitElement {
                     <input-field label=${FieldLabels.RaiseFields.FileUpload} type="file" id="upload">
                 ` : nothing}
             </div>
-            <button-comp buttonText=${this.specialRaise ? FieldLabels.RaiseFields.AddSpecialRaise : FieldLabels.RaiseFields.AddRegularRaise} 
-            primary
-            icon="ic:baseline-add-chart"
-            handleClick=${() => this._addWageEvent()}>
-            </button-comp>
         `
     }
 
@@ -163,8 +159,17 @@ export class WageEvents extends LitElement {
         this._raiseType = e.detail;
     }
 
-    _addWageEvent = () =>{
-        console.log('Clicked')
+    _addWageEvent = (specialRaise : boolean ) =>{
+        specialRaise ? this._specialWageEvents = [...this._specialWageEvents, html`<wage-events class='special-raise'></wage-events>`] : this._regularWageEvents = [...this._regularWageEvents, html`<wage-events></wage-events>`]
+
+        this.dispatchEvent(new CustomEvent('add-wage-event', {
+            detail: {
+                regularRaise: this._regularWageEvents,
+                specialRaise: this._specialWageEvents,
+            },
+            bubbles: true,
+            composed: true
+        }))
     }
 }
 

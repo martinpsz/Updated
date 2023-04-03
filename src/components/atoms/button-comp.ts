@@ -57,7 +57,6 @@ export class ButtonComp extends LitElement {
         const classes = {primary : this.primary}
         return html`
             <button ?disabled=${this.buttonDisabled} 
-                    @click=${this.handleClick}
                     class=${classMap(classes)}
                     >${this.icon ? html`<iconify-icon id="icon" icon=${this.icon} width="20" height="20"></iconify-icon>`: html``}${this.buttonText}
             </button>

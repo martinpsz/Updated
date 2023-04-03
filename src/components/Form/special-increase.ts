@@ -7,10 +7,6 @@ import {FieldLabels} from '../../config/settings.json'  assert { type: "json" };
 
 @customElement('special-increase')
 export class SpecialIncrease extends LitElement {
-    static styles = css`
-        
-    `
-
     @state()
     _specialRaise = false;
 
@@ -25,6 +21,10 @@ export class SpecialIncrease extends LitElement {
                 </radio-prompt>
                 ${this._specialRaise ? html`<wage-events specialRaise></wage-events>` : nothing}
             </div>
+            <button-comp buttonText=${FieldLabels.RaiseFields.AddSpecialRaise} 
+            primary
+            icon="ic:baseline-add-chart">
+            </button-comp>
         `
     }
 
