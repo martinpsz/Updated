@@ -78,14 +78,17 @@ export class UnitStatus extends LitElement {
                     <div class="unit-status-meta">
                         <input-field label=${MemberCount} 
                                      type="number"
+                                     value=${this.memberCount}
                                      @get-onchange-value=${(e: CustomEvent) => this._setUnitStatusFields(e)}>
                         </input-field>
                         <input-field label=${ContractDates.Start} 
                                      type="date"
+                                     value=${this.contractStartDate}
                                      @get-debounced-value=${(e: CustomEvent) => this._setUnitStatusFields(e)}>
                         </input-field>
                         <input-field label=${ContractDates.End} 
                                      type="date"
+                                     value=${this.contractEndDate}
                                      @get-debounced-value=${(e: CustomEvent) => this._setUnitStatusFields(e)}>
                         </input-field>
                         <input-field label=${CBAUpload} 

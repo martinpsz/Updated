@@ -26,7 +26,6 @@ export class WageSection extends LitElement {
 
 
     protected render() {
-        console.log(this._regularRaiseArray)
         return html`
             <form-header title=${FieldLabels.AcrossTheBoard.Header}></form-header>
             <wage-events></wage-events>

@@ -27,7 +27,6 @@ export class SpecialIncrease extends LitElement {
 
 
     protected render() {
-        console.log(this._specialRaiseArray)
         let {Header, QuestionSpecialRaise} = FieldLabels.SpecialIncreases;
         return html`
             <form-header title=${Header}></form-header>

@@ -60,7 +60,10 @@ export class UnitForm extends LitElement {
                                  phone=${this.unit_data?.contact?.phone}
                                  @get-reporter-fields=${this._setReporterFieldData}>
                 </reporter-fields>
-                <unit-status @get-inactive-status=${this._setInactiveStatus}
+                <unit-status memberCount=${this.unit_data?.number_of_members}
+                             contractStartDate=${this.unit_data?.agreement_eff_date}
+                             contractEndDate=${this.unit_data?.agreement_exp_date}
+                             @get-inactive-status=${this._setInactiveStatus}
                              @get-wage-status=${this._setWageStatus}
                              @get-bargaining-status=${this._setBargainingStatus}
                              @get-unit-status=${this._setUnitStatusData}>
