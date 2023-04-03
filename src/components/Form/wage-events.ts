@@ -14,6 +14,13 @@ export class WageEvents extends LitElement {
         :host{
             display: flex;
             flex-direction: column;
+            margin-bottom: 0.5em;
+            padding: 0.25em;
+        }
+
+
+        :host(#first) .remove{
+            display: none;
         }
 
         .wage-event{
@@ -24,8 +31,9 @@ export class WageEvents extends LitElement {
                                 'upload upload . . .';
             grid-column-gap: 1em;
             margin: 1em 0;
-            bottom-border: 1px solid rgba(var(--black), 0.25);
         }
+
+        
 
         .special-raise{
             grid-row-gap: 1.5em;
@@ -82,13 +90,11 @@ export class WageEvents extends LitElement {
             font-size: 1.5em;
             justify-self: end;
             align-self: start;
+            margin-top: -0.5em;
             cursor: pointer;
             grid-area: remove;
         }
 
-        .wage-event:nth-of-type(1) .remove{
-            display: none;
-        }
 
         button-comp{
             margin-top: 1em;
@@ -146,9 +152,9 @@ export class WageEvents extends LitElement {
                         <span>$</span>
                     </div>
                 `}
-                <span class='remove'>&#x2715;</span>
+                <span class='remove' @click=${this._removeRaiseFromWageArray}>&#x2715;</span>
                 ${this.specialRaise ? html`
-                    <input-field label=${FieldLabels.RaiseFields.NumberAffected}        type="number" id="num-affected">
+                    <input-field label=${FieldLabels.RaiseFields.NumberAffected} type="number" id="num-affected">
                     </input-field>
                     <input-field label=${FieldLabels.RaiseFields.Description} type="text" id="description">
                     </input-field>
@@ -167,14 +173,8 @@ export class WageEvents extends LitElement {
         const input = component?.renderRoot.querySelector('input')
         const inputVal = Date.parse(input?.value)
 
-
         const minDate = Date.parse(FieldLabels.InputFieldSettings.date.min)
         const maxDate = Date.parse(FieldLabels.InputFieldSettings.date.max)
-
-        console.log(`Min date:`, minDate)
-        console.log(`Input date:`, inputVal)
-        console.log(`Max date:`, maxDate)
-        
     
         if(minDate <= inputVal && inputVal <= maxDate){ 
             console.log('Value in range')
@@ -187,6 +187,10 @@ export class WageEvents extends LitElement {
             input?.reportValidity()
             //this.effectiveDate = inputVal;
         }
+    }
+
+    _removeRaiseFromWageArray = () =>{
+        console.log(this)
     }
 
 }

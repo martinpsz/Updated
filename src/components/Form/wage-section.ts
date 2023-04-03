@@ -14,10 +14,16 @@ export class WageSection extends LitElement {
             flex-direction: column;
         }
 
+
         button-comp{
             align-self: flex-end;
             margin-top: 1em;
         }
+
+        wage-events:nth-of-type(n+2){
+           border-top: 1px solid rgba(var(--blue), 0.25);
+        }
+
     
     `
 
@@ -28,7 +34,7 @@ export class WageSection extends LitElement {
     protected render() {
         return html`
             <form-header title=${FieldLabels.AcrossTheBoard.Header}></form-header>
-            <wage-events></wage-events>
+            <wage-events id="first"></wage-events>
             ${this._regularRaiseArray.map((item) => item)}
             <button-comp buttonText=${FieldLabels.RaiseFields.AddRegularRaise} 
             primary

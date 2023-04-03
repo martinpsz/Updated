@@ -122,7 +122,7 @@ export class InputField extends LitElement {
                        min=${this.type === 'date' ? FieldLabels.InputFieldSettings.date.min : nothing}} 
                        max=${this.type === 'date' ? FieldLabels.InputFieldSettings.date.max : nothing}
                        required=${this.required ? this.required : nothing}
-                       .value=${this.value ? this.value : nothing}
+                       .value=${this.value ? this.value : ''}
                        @input=${debounce(this._getDebouncedInput)}
                        @change=${this._getOnChangeInput}/>
 
@@ -136,8 +136,6 @@ export class InputField extends LitElement {
     _getDebouncedInput = () => {
         const inputElement = this.renderRoot.querySelector('.input-container input') as HTMLInputElement;
         const inputValue = inputElement.value;
-
-        console.log(inputValue)
         
         this.dispatchEvent(new CustomEvent('get-debounced-value', {
             detail: {

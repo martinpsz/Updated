@@ -17,6 +17,10 @@ export class SpecialIncrease extends LitElement {
             align-self: flex-end;
             margin-top: 1em;
         }
+
+        wage-events:nth-of-type(n+2){
+            border-top: 1px solid rgba(var(--blue), 0.25);
+        }
     `
 
     @state()
@@ -34,7 +38,7 @@ export class SpecialIncrease extends LitElement {
                 <radio-prompt prompt=${QuestionSpecialRaise}
                               @get-toggle-selection=${this._setSpecialRaise}>
                 </radio-prompt>
-                ${this._specialRaise ? html`<wage-events specialRaise></wage-events>
+                ${this._specialRaise ? html`<wage-events specialRaise id="first"></wage-events>
                 ${this._specialRaiseArray.map((item) => item)}
                 <button-comp buttonText=${FieldLabels.RaiseFields.AddSpecialRaise} 
                 primary
