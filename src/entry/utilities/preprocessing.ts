@@ -20,7 +20,10 @@ export const processData = (data: any) => {
 
     let unitContracts = Object.values(updatedData.units);
 
+
     return {...masterContracts, unit_contracts: unitContracts}
+
+    
  
 }
 

@@ -113,7 +113,7 @@ export class UnitContainer extends LitElement {
                         number_of_members=${unit.number_of_members}
                         unit_name=${unit.unit_name}
                         @click=${this._selectUnit}
-                        class=${this._unitSelection === unit.unit_id.toString() ? 'selected' : ''}>
+                        class=${this._unitSelection === unit?.unit_id.toString() ? 'selected' : ''}>
                     </unit-element>
                 `
             })
@@ -149,7 +149,7 @@ export class UnitContainer extends LitElement {
         `  
     }
 
-    connectedCallback(): void {
+    connectedCallback(){
         super.connectedCallback()
         this._initializeUnitSelection()
     }
@@ -158,7 +158,7 @@ export class UnitContainer extends LitElement {
     _initializeUnitSelection = () => {
         const data = processedData as ProcessedData;
         const unit_contracts = data.unit_contracts as UnitList;
-        this._unitSelection = unit_contracts[0].unit_id!.toString() 
+        this._unitSelection = unit_contracts[0]?.unit_id?.toString() as string;
         const initialUnitSelection = this._flattenedUnits.find((elem) => {
             let unit = elem as Unit;
 

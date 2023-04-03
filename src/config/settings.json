@@ -64,7 +64,7 @@
         },
         
         "Errors": {
-            "DateOutOfRange": "Only increases or decreases effective 8/1/2022-7/31/2023 can be recorded in this year’s Minimum Dues report. Did the unit receive a wage increase or decrease in this time period"
+            "DateOutOfRange": "Only increases or decreases effective 8/1/2022-7/31/2023 can be recorded in this year’s Minimum Dues report. Did the unit receive a wage increase or decrease in this time period?"
         },
 
         "Footer": {

@@ -1,6 +1,6 @@
 import { LitElement, html, css, nothing } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
-import {FieldLabels} from '../../config/settings.json'  assert { type: "json" };
+import {FieldLabels} from '../../config/settings.json';
 import '../Form/form-header'
 import '../atoms/radio-prompt'
 import '../atoms/button-comp'

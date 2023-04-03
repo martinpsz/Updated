@@ -1,7 +1,7 @@
 import { LitElement, html, css, nothing } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 import '../Form/form-header';
-import {FieldLabels} from '../../config/settings.json'  assert { type: "json" };
+import {FieldLabels} from '../../config/settings.json';
 import '../atoms/radio-prompt';
 import '../atoms/input-field';
 import '../Form/wage-section';

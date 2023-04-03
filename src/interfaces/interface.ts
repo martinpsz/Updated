@@ -5,6 +5,7 @@ export interface Contact {
 }
 
 export interface Unit {
+    affiliate_id: number;
     agr_id: number;
     agreement_eff_date: string | null;
     agreement_exp_date: string | null;
@@ -41,12 +42,12 @@ export interface WageEvent {
 }
 
 export interface FormPayload {
+    affiliate_id: number;
+    period_id: number;
     unit_id: number | null;
     unit_name: string | null;
     local: number | null;
     subunit: number | string | null;
-    council: number | null;
-    state: string;
     contact: Contact | null;
 
     inactive_status: 'Yes' | 'No';
@@ -57,10 +58,11 @@ export interface FormPayload {
     wage_status: 'Yes' | 'No';
     bargaining_status: 'Yes' | 'No';
 
-    wage_events: WageEvent | WageEvent[] | [];
+    regular_wage_events: WageEvent | WageEvent[] | [];
+    special_wage_events: WageEvent | WageEvent[] | [];
 
     comment: string | null;
 
-    status: 'NEEDS REVIEW' | 'SUBMITTED' | 'APPROVED';
+    filing_status: 'NEEDS REVIEW' | 'SUBMITTED' | 'APPROVED';
     notes: string | null; 
 }

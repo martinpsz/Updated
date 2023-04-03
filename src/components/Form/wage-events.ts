@@ -4,7 +4,7 @@ import '../atoms/input-field';
 import '../atoms/raise-select';
 import './form-header';
 import '../atoms/button-comp';
-import {FieldLabels} from '../../config/settings.json'  assert { type: "json" };
+import {FieldLabels} from '../../config/settings.json';
 import {WageEvent} from '../../interfaces/interface.js';
 
 
@@ -119,7 +119,6 @@ export class WageEvents extends LitElement {
 
 
     protected render(){
-        console.log(this._regularWageEvents)
         return html`
             <div class="wage-event ${this.specialRaise && 'special-raise'}">
                 <input-field label=${FieldLabels.RaiseFields.EffectiveDate} 
@@ -166,20 +165,27 @@ export class WageEvents extends LitElement {
     _setEffectiveDate = (e: CustomEvent) =>{
         const component = e.target as any; //fix type here
         const input = component?.renderRoot.querySelector('input')
-        const inputVal = input?.value;
+        const inputVal = Date.parse(input?.value)
+
+
+        const minDate = Date.parse(FieldLabels.InputFieldSettings.date.min)
+        const maxDate = Date.parse(FieldLabels.InputFieldSettings.date.max)
+
+        console.log(`Min date:`, minDate)
+        console.log(`Input date:`, inputVal)
+        console.log(`Max date:`, maxDate)
         
-        console.log('input min', input.min)
-        console.log('input max', input.max)
-        console.log('input val', inputVal)
-        console.log('input validity', input?.validity)
-        if(new Date(input.min) < new Date(FieldLabels.InputFieldSettings.date.min) ||
-           new Date(input.max) > new Date(FieldLabels.InputFieldSettings.date.max)){
-            input?.setCustomValidity(FieldLabels.Errors.DateOutOfRange)
-            input?.reportValidity()
+    
+        if(minDate <= inputVal && inputVal <= maxDate){ 
+            console.log('Value in range')
+            input?.setCustomValidity('')
         }
         else{
-            input?.setCustomValidity('')
-            this.effectiveDate = inputVal;
+            
+            console.log('Value of out range')
+            input?.setCustomValidity(FieldLabels.Errors.DateOutOfRange)
+            input?.reportValidity()
+            //this.effectiveDate = inputVal;
         }
     }
 

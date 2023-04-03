@@ -1,6 +1,6 @@
 import { LitElement, html, css } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
-import {FieldLabels} from '../../config/settings.json'  assert { type: "json" };
+import {FieldLabels} from '../../config/settings.json';
 
 @customElement('employer-fields')
 export class EmployerFields extends LitElement {

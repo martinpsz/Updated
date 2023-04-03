@@ -3,7 +3,7 @@ import { customElement, property, state } from "lit/decorators.js";
 import '../Form/wage-events'
 import '../Form/form-header'
 import '../atoms/radio-prompt.js'
-import {FieldLabels} from '../../config/settings.json'  assert { type: "json" };
+import {FieldLabels} from '../../config/settings.json';
 
 @customElement('special-increase')
 export class SpecialIncrease extends LitElement {

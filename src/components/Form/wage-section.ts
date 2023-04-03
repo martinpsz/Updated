@@ -3,7 +3,7 @@ import { customElement, state} from "lit/decorators.js";
 import '../Form/form-header';
 import '../Form/wage-events';
 import '../Form/special-increase'
-import {FieldLabels} from '../../config/settings.json'  assert { type: "json" };
+import {FieldLabels} from '../../config/settings.json';
 import {WageEvent} from '../../interfaces/interface.js';
 
 @customElement('wage-section')

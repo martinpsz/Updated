@@ -1,7 +1,7 @@
 import { LitElement, html, css } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 import {classMap} from "lit-html/directives/class-map.js";
-import { UrlObject } from "url";
+
 
 @customElement('button-comp')
 export class ButtonComp extends LitElement {
