@@ -100,6 +100,9 @@ export class WageEvents extends LitElement {
     @property({type: Boolean})
     specialRaise = false;
 
+    @property()
+    effectiveDate!: string;
+
     @state()
     _raiseType!: "% increase" | "% decrease" | "hourly increase" | "hourly decrease" | "lump sum/bonus";
 
@@ -121,6 +124,7 @@ export class WageEvents extends LitElement {
             <div class="wage-event ${this.specialRaise && 'special-raise'}">
                 <input-field label=${FieldLabels.RaiseFields.EffectiveDate} 
                              type="date"
+                             @get-debounced-value=${this._setEffectiveDate}
                              id="effective-date">
                 </input-field>
                 <raise-select label=${FieldLabels.RaiseFields.SelectRaise}
@@ -157,6 +161,26 @@ export class WageEvents extends LitElement {
 
     _setRaiseType = (e: CustomEvent) =>{
         this._raiseType = e.detail;
+    }
+
+    _setEffectiveDate = (e: CustomEvent) =>{
+        const component = e.target as any; //fix type here
+        const input = component?.renderRoot.querySelector('input')
+        const inputVal = input?.value;
+        
+        console.log('input min', input.min)
+        console.log('input max', input.max)
+        console.log('input val', inputVal)
+        console.log('input validity', input?.validity)
+        if(new Date(input.min) < new Date(FieldLabels.InputFieldSettings.date.min) ||
+           new Date(input.max) > new Date(FieldLabels.InputFieldSettings.date.max)){
+            input?.setCustomValidity(FieldLabels.Errors.DateOutOfRange)
+            input?.reportValidity()
+        }
+        else{
+            input?.setCustomValidity('')
+            this.effectiveDate = inputVal;
+        }
     }
 
 }
