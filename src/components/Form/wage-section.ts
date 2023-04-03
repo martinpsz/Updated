@@ -8,12 +8,23 @@ import {WageEvent} from '../../interfaces/interface.js';
 
 @customElement('wage-section')
 export class WageSection extends LitElement {
+    static styles = css`
+        :host{
+            display: flex;
+            flex-direction: column;
+        }
+
+        button-comp{
+            align-self: flex-end;
+            margin-top: 1em;
+        }
+    
+    `
 
     @property()
     regular_raises!: Array<WageEvent>;
 
-    @property()
-    special_raises!: Array<WageEvent>;
+
 
     protected render() {
         return html`

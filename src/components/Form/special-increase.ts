@@ -7,6 +7,18 @@ import {FieldLabels} from '../../config/settings.json'  assert { type: "json" };
 
 @customElement('special-increase')
 export class SpecialIncrease extends LitElement {
+    static styles = css`
+        div{
+            display: flex;
+            flex-direction: column;
+        }
+
+        button-comp{
+            align-self: flex-end;
+            margin-top: 1em;
+        }
+    `
+
     @state()
     _specialRaise = false;
 
