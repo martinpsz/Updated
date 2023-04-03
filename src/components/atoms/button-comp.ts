@@ -63,9 +63,6 @@ export class ButtonComp extends LitElement {
         `
     }
 
-    handleClick = () => {
-        this.dispatchEvent(new CustomEvent('button-clicked', {bubbles: true, composed: true}))
-    }
     
     
 }

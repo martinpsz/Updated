@@ -1,5 +1,5 @@
-import { LitElement, html, css, nothing} from "lit";
-import { customElement, property} from "lit/decorators.js";
+import { LitElement, html, css, nothing, TemplateResult} from "lit";
+import { customElement, state} from "lit/decorators.js";
 import '../Form/form-header';
 import '../Form/wage-events';
 import '../Form/special-increase'
@@ -21,23 +21,28 @@ export class WageSection extends LitElement {
     
     `
 
-    @property()
-    regular_raises!: Array<WageEvent>;
-
+    @state()
+    _regularRaiseArray: Array<TemplateResult> = [];
 
 
     protected render() {
+        console.log(this._regularRaiseArray)
         return html`
             <form-header title=${FieldLabels.AcrossTheBoard.Header}></form-header>
             <wage-events></wage-events>
+            ${this._regularRaiseArray.map((item) => item)}
             <button-comp buttonText=${FieldLabels.RaiseFields.AddRegularRaise} 
             primary
+            @click=${this._addRegularRaise}
             icon="ic:baseline-add-chart">
             </button-comp>
             <special-increase></special-increase>
         `
     }
 
+    _addRegularRaise = () => {
+        this._regularRaiseArray = [...this._regularRaiseArray, html`<wage-events></wage-events>`]
+    }
 }
 
 declare global {
