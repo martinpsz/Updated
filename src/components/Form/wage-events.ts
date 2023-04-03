@@ -159,18 +159,6 @@ export class WageEvents extends LitElement {
         this._raiseType = e.detail;
     }
 
-    _addWageEvent = (specialRaise : boolean ) =>{
-        specialRaise ? this._specialWageEvents = [...this._specialWageEvents, html`<wage-events class='special-raise'></wage-events>`] : this._regularWageEvents = [...this._regularWageEvents, html`<wage-events></wage-events>`]
-
-        this.dispatchEvent(new CustomEvent('add-wage-event', {
-            detail: {
-                regularRaise: this._regularWageEvents,
-                specialRaise: this._specialWageEvents,
-            },
-            bubbles: true,
-            composed: true
-        }))
-    }
 }
 
 declare global {

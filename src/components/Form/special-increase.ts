@@ -19,12 +19,14 @@ export class SpecialIncrease extends LitElement {
                 <radio-prompt prompt=${QuestionSpecialRaise}
                               @get-toggle-selection=${this._setSpecialRaise}>
                 </radio-prompt>
-                ${this._specialRaise ? html`<wage-events specialRaise></wage-events>` : nothing}
+                ${this._specialRaise ? html`<wage-events specialRaise></wage-events>
+                <button-comp buttonText=${FieldLabels.RaiseFields.AddSpecialRaise} 
+                primary
+                icon="ic:baseline-add-chart"
+                </button-comp>
+                ` : nothing}
             </div>
-            <button-comp buttonText=${FieldLabels.RaiseFields.AddSpecialRaise} 
-            primary
-            icon="ic:baseline-add-chart">
-            </button-comp>
+
         `
     }
 

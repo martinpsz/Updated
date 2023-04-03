@@ -21,19 +21,12 @@ export class WageSection extends LitElement {
             <wage-events></wage-events>
             <button-comp buttonText=${FieldLabels.RaiseFields.AddRegularRaise} 
             primary
-            icon="ic:baseline-add-chart"
+            icon="ic:baseline-add-chart">
             </button-comp>
             <special-increase></special-increase>
         `
     }
 
-    /*_updateWageEvents = (e: CustomEvent) => {
-        this.regular_raises = e.detail.regularRaise;
-    }
-
-    _updateSpecialWageEvents = (e: CustomEvent) => {
-        this.special_raises = e.detail.specialRaise;
-    }*/
 }
 
 declare global {
