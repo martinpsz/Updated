@@ -6,6 +6,7 @@ import '../atoms/radio-prompt';
 import '../atoms/input-field';
 import '../Form/wage-section';
 import '../Form/comment-submit';
+import {WageEvent} from '../../interfaces/interface.js';
 
 @customElement('unit-status')
 export class UnitStatus extends LitElement {
@@ -44,6 +45,15 @@ export class UnitStatus extends LitElement {
 
     @property({type: File})
     CBAFile!: File;
+
+    @property({type: String})
+    comment!: string;
+
+    @property()
+    RegularWageEvent!: WageEvent;
+
+    @property()
+    SpecialWageEvent!: WageEvent;
 
 
     constructor(){
@@ -105,12 +115,14 @@ export class UnitStatus extends LitElement {
                                       initialChecked="No"
                                       @get-prompt-toggle-selection=${(e: CustomEvent) => this._setBargainingStatus(e, QuestionBargaining)}>
                         </radio-prompt>
-                        <comment-submit></comment-submit>
+                        <comment-submit .value=${this.comment}></comment-submit>
                     ` : html`
-                            <wage-section></wage-section>
-                            <comment-submit></comment-submit>
+                            <wage-section .RegularWageEvent=${this.RegularWageEvent}
+                                          .SpecialWageEvent=${this.SpecialWageEvent}>
+                            </wage-section>
+                            <comment-submit .value=${this.comment}></comment-submit>
                             `}
-                ` : html`<comment-submit></comment-submit>`}
+                ` : html`<comment-submit .value=${this.comment}></comment-submit>`}
             </div>
         `
     }

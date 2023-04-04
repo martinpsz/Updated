@@ -1,15 +1,14 @@
 import { processedData } from "../../entry/index.js";
-import { LitElement, html, css } from "lit";
-import { customElement} from "lit/decorators.js";
+import { LitElement, html } from "lit";
+import { customElement, property} from "lit/decorators.js";
 import "./components/unit-container";
+import { Unit, FormPayload } from "../../interfaces/interface.js";
 
 
 
 @customElement("unit-list")
 export class UnitList extends LitElement {
-    static styles = css`
-
-    `
+    
     protected render() {
         return html`
             <unit-container 

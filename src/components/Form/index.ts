@@ -40,34 +40,30 @@ export class UnitForm extends LitElement {
     `
 
     @property()
-    unit_data!: Unit & FormPayload;
-
-    @property({attribute: false})
-    formData!: FormPayload;
+    form_data!: FormPayload;
 
 
     protected render() {
         return html`
             <status-bar></status-bar>
             <form>
-                <employer-fields employer=${this.unit_data?.unit_name}
-                                 local=${this.unit_data?.local}
-                                 subunit=${this.unit_data?.subunit}
+                <employer-fields employer=${this.form_data?.unit_name}
+                                 local=${this.form_data?.local}
+                                 subunit=${this.form_data?.subunit}
                                  @get-employer-fields=${(e: CustomEvent) => this._setEmployerFieldData(e)}>
                 </employer-fields>
-                <reporter-fields reporter=${this.unit_data?.contact?.name}
-                                 email=${this.unit_data?.contact?.email}
-                                 phone=${this.unit_data?.contact?.phone}
+                <reporter-fields reporter=${this.form_data?.contact?.name}
+                                 email=${this.form_data?.contact?.email}
+                                 phone=${this.form_data?.contact?.phone}
                                  @get-reporter-fields=${this._setReporterFieldData}>
                 </reporter-fields>
-                <unit-status memberCount=${this.unit_data?.number_of_members}
-                             contractStartDate=${this.unit_data?.agreement_eff_date}
-                             contractEndDate=${this.unit_data?.agreement_exp_date}
-                             @get-inactive-status=${this._setInactiveStatus}
-                             @get-wage-status=${this._setWageStatus}
-                             @get-bargaining-status=${this._setBargainingStatus}
-                             @get-unit-status=${this._setUnitStatusData}
-                             @get-feedback=${this._setUserFeedback}>
+                <unit-status memberCount=${this.form_data?.number_of_members}
+                             contractStartDate=${this.form_data?.agreement_eff_date}
+                             contractEndDate=${this.form_data?.agreement_exp_date}
+                             .RegularWageEvent=${this.form_data?.regular_wage_events[0]}
+                             .SpecialWageEvent=${this.form_data?.special_wage_events[0]}
+                             comment=${this.form_data?.comment}
+                             
                 </unit-status>
             </form>
         `
@@ -75,15 +71,17 @@ export class UnitForm extends LitElement {
 
     _setEmployerFieldData = (e: CustomEvent) => {
         const {employer, local, subunit} = e.detail;
-        this.unit_data = {...this.unit_data, unit_name: employer, local:local, subunit: subunit}
+        this.form_data = {...this.form_data, unit_name: employer, local:local, subunit: subunit}
     }
 
     _setReporterFieldData = (e: CustomEvent) => {
         const {reporter, email, phone} = e.detail;
-        this.unit_data = {...this.unit_data, contact: {...this.unit_data.contact, name: reporter, email: email, phone: phone}}
+        this.form_data = {...this.form_data, contact: {...this.form_data.contact, name: reporter, email: email, phone: phone}}
     }
 
-    _setInactiveStatus = (e: CustomEvent) => {
+    
+
+    /*_setInactiveStatus = (e: CustomEvent) => {
         this.unit_data = {...this.unit_data, inactive_status: e.detail}
     }
 
@@ -102,9 +100,9 @@ export class UnitForm extends LitElement {
 
     _setUserFeedback = (e: CustomEvent) => {
         this.unit_data = {...this.unit_data, comment: e.detail}
-    }
+    }*/
 
-    
+
     
 }
 

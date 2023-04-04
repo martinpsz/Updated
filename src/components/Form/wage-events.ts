@@ -133,27 +133,27 @@ export class WageEvents extends LitElement {
     @property()
     supporting_doc!: WageEvent['supporting_doc'];
 
+    
     @property()
-    regularWageEvent!: WageEvent;
+    RegularWageEvent!: WageEvent;
 
     @property()
-    specialWageEvent!: WageEvent;
+    SpecialWageEvent!: WageEvent;
 
 
 
     protected render(){
-        console.log('effective date at render: ', this.effective_date)
-    
+        console.log(this.RegularWageEvent)
         return html`
             <div class="wage-event ${this.specialRaise && 'special-raise'}">
                 <input-field label=${FieldLabels.RaiseFields.EffectiveDate} 
                              type='date'
-                             value=${this.effective_date}
-                             @get-debounced-value=${(e: CustomEvent) => this.handleInput(e, 'effective_date')}
+                             value=${this.RegularWageEvent?.effective_date}
+                             @get-debounced-value=${this._update_effective_date}
                              id="effective-date">
                 </input-field>
                 <raise-select label=${FieldLabels.RaiseFields.SelectRaise}
-                              value=${this.wage_event_type}
+                             value=${this.wage_event_type}
                               id="raise-select">
                 </raise-select>
                 ${this.wage_event_type === "% increase" || this.wage_event_type === "% decrease" ? html`
@@ -183,7 +183,7 @@ export class WageEvents extends LitElement {
                 `}
                 <span class='remove' @click=${this._removeRaiseFromWageArray}>&#x2715;</span>
                 ${this.specialRaise ? html`
-                    <input-field label=${FieldLabels.RaiseFields.NumberAffected}    type="number" id="num-affected" value=${this.num_affected}>
+                    <input-field label=${FieldLabels.RaiseFields.NumberAffected} type="number" id="num-affected" value=${this.num_affected}>
                     </input-field>
                     <input-field label=${FieldLabels.RaiseFields.Description} type="text" id="description" value=${this.description}>
                     </input-field>
@@ -193,10 +193,10 @@ export class WageEvents extends LitElement {
         `
     }
 
-    handleInput = (e: CustomEvent, eventLabel: string) => {
-        if(eventLabel === 'effective_date'){
-            this.effective_date = e.detail.value;
-        }
+    _update_effective_date = (e: CustomEvent) => {
+        this.RegularWageEvent = {...this.RegularWageEvent, effective_date: e.detail.value}
+
+        
     }
 
     _set_wage_event_type = (e: CustomEvent) =>{

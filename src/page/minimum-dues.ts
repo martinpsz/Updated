@@ -1,11 +1,11 @@
 import {LitElement, html, css} from 'lit';
-import {customElement, state} from 'lit/decorators.js';
+import {customElement, property} from 'lit/decorators.js';
 import '../components/html-header';
 import '../components/html-footer';
 import '../components/UnitList/index';
 import '../components/atoms/input-field';
 import '../components/Form/index.js'
-import {FormPayload, Unit} from '../interfaces/interface.js';
+import {FormPayload, Unit, WageEvent} from '../interfaces/interface.js';
 
 @customElement('minimum-dues')
 export class MinimumDues extends LitElement {
@@ -29,10 +29,9 @@ export class MinimumDues extends LitElement {
         }
     `
 
-    @state()
-    unit_data!: Unit & FormPayload;
-
-
+    @property()
+    form_data!: FormPayload;
+    
     protected render(){
         return html`
             <div class="container">
@@ -41,7 +40,7 @@ export class MinimumDues extends LitElement {
                     <unit-list @initial-unit-selection=${this.set_initial_unit_selection}
                                @update-unit-selection=${this.set_updated_unit_selection}>
                     </unit-list>
-                    <unit-form .unit_data=${this.unit_data}></unit-form>
+                    <unit-form .form_data=${this.form_data}></unit-form>
                 </main>
                 <html-footer></html-footer>
             </div>
@@ -59,11 +58,64 @@ export class MinimumDues extends LitElement {
     }
     
     set_initial_unit_selection = (e: CustomEvent) => {
-        this.unit_data = e.detail.unit 
+        this.form_data = this.generateUnitDataForForm(e.detail.unit)
     }
 
     set_updated_unit_selection(e: CustomEvent){
-        this.unit_data = e.detail.unit
+        this.form_data = this.generateUnitDataForForm(e.detail.unit)
+
+    }
+
+    generateUnitDataForForm = (unit: Unit) => {
+        //remove fields no longer needed from unit object
+        const deleteProps = (unit: Unit, propsToRemove: string[]) => {
+            for (const p of propsToRemove){
+                delete unit[p as keyof Unit];
+            }
+
+            return unit;
+        }
+
+        const form_data_with_deleted_props = deleteProps(unit, ['master', 'master_id', 'master_name', 'report_individually', 'state'])
+
+        //initialize values for form_data
+        const form_fields = {
+            inactive_status: "No" as FormPayload['inactive_status'],
+            wage_status: 'Yes' as FormPayload['wage_status'],
+            bargaining_status: null,
+            cba_file: null,
+            comment: '',
+            regular_wage_events: [
+                {
+                    key: 0,
+                    effective_date: '',
+                    wage_event_type: '% increase' as WageEvent['wage_event_type'], 
+                    wage_event_value: null,
+                    starting_hourly: null,
+                    starting_annual: null,
+                }
+            ],
+
+            special_wage_events: [
+                {
+                    key: 0,
+                    effective_date: '',
+                    wage_event_type: '% increase' as WageEvent['wage_event_type'],
+                    wage_event_value: null,
+                    starting_hourly: null,
+                    starting_annual: null,
+                    num_affected: null,
+                    description: null,
+                    supporting_doc: null,
+                }
+
+            ],
+            filing_status: 'Needs Review' as FormPayload['filing_status'],
+            notes: ''
+        }
+
+        return {...form_data_with_deleted_props, ...form_fields}
+        
     }
 }
 
