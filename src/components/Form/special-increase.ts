@@ -35,7 +35,6 @@ export class SpecialIncrease extends LitElement {
 
 
     protected render() {
-        console.log(this.SpecialWageEvent)
         let {Header, QuestionSpecialRaise} = FieldLabels.SpecialIncreases;
         return html`
             <form-header title=${Header}></form-header>
@@ -50,7 +49,7 @@ export class SpecialIncrease extends LitElement {
                 ${this._specialRaiseArray.map((item) => item)}
                 <button-comp buttonText=${FieldLabels.RaiseFields.AddSpecialRaise} 
                 primary
-                @click=${this._addSpecialRaise}
+                @click={}
                 icon="ic:baseline-add-chart">
                 </button-comp>
                 ` : nothing}
@@ -65,12 +64,12 @@ export class SpecialIncrease extends LitElement {
         this._specialRaise = e.detail === 'Yes' ? true : false;
     }
 
-    _addSpecialRaise = () => {
+    /*_addSpecialRaise = () => {
         this._specialRaiseArray = [...this._specialRaiseArray, html`<wage-events specialRaise 
                                                                                  key=${this.SpecialWageEvent.key = this._specialRaiseArray?.length + 1}
                                                                                  .SpecialWageEvent=${this.SpecialWageEvent}>
                                                                     </wage-events>`]
-    }
+    }*/
 }
 
 declare global {

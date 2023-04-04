@@ -29,8 +29,8 @@ export interface ProcessedData {
 }
 
 export interface WageEvent {
-    key: number;
-    effective_date: string | null | undefined;
+    key: string;
+    effective_date: string | '';
     wage_event_type: '% increase' | '% decrease' | 'hourly increase' | 'hourly decrease' | 'lump sum/bonus';
     wage_event_value: number | string | null;
     starting_hourly: number | null;

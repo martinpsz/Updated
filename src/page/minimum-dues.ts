@@ -87,7 +87,7 @@ export class MinimumDues extends LitElement {
             comment: '',
             regular_wage_events: [
                 {
-                    key: 0,
+                    key: '0',
                     effective_date: '',
                     wage_event_type: '% increase' as WageEvent['wage_event_type'], 
                     wage_event_value: null,
@@ -98,7 +98,7 @@ export class MinimumDues extends LitElement {
 
             special_wage_events: [
                 {
-                    key: 0,
+                    key: '0',
                     effective_date: '',
                     wage_event_type: '% increase' as WageEvent['wage_event_type'],
                     wage_event_value: null,

@@ -5,7 +5,7 @@ import '../atoms/raise-select';
 import './form-header';
 import '../atoms/button-comp';
 import {FieldLabels} from '../../config/settings.json';
-import {WageEvent} from '../../interfaces/interface.js';
+import {WageEventList, WageEvent} from '../../interfaces/interface.js';
 
 
 @customElement('wage-events')
@@ -133,12 +133,12 @@ export class WageEvents extends LitElement {
     @property()
     supporting_doc!: WageEvent['supporting_doc'];
 
-    
     @property()
     RegularWageEvent!: WageEvent;
 
     @property()
     SpecialWageEvent!: WageEvent;
+
 
 
 
@@ -149,11 +149,12 @@ export class WageEvents extends LitElement {
                 <input-field label=${FieldLabels.RaiseFields.EffectiveDate} 
                              type='date'
                              value=${this.RegularWageEvent?.effective_date}
-                             @get-debounced-value=${this._update_effective_date}
+                             @get-debounced-value=${(e:CustomEvent) => this._update_wage_event(e, 'effective_date')}
                              id="effective-date">
                 </input-field>
                 <raise-select label=${FieldLabels.RaiseFields.SelectRaise}
-                             value=${this.wage_event_type}
+                              value=${this.RegularWageEvent?.wage_event_type}
+                              @get-raise-type=${(e: CustomEvent) => this._update_wage_event(e, 'wage_event_type')}
                               id="raise-select">
                 </raise-select>
                 ${this.wage_event_type === "% increase" || this.wage_event_type === "% decrease" ? html`
@@ -193,15 +194,17 @@ export class WageEvents extends LitElement {
         `
     }
 
-    _update_effective_date = (e: CustomEvent) => {
-        this.RegularWageEvent = {...this.RegularWageEvent, effective_date: e.detail.value}
-
-        
+    _update_wage_event = (e: CustomEvent, event_type: string) => {
+        switch(event_type){
+            case 'effective_date':
+                this.RegularWageEvent = {...this.RegularWageEvent, effective_date: e.detail?.value}
+                break;
+            case 'wage_event_type':
+                this.RegularWageEvent = {...this.RegularWageEvent, wage_event_type: e.detail.toLowerCase()}
+        }
     }
 
-    _set_wage_event_type = (e: CustomEvent) =>{
-        this.wage_event_type = e.detail;
-    }
+
 
     _setEffectiveDate = (e: CustomEvent) =>{
         const component = e.target as any; //fix type here
@@ -223,7 +226,7 @@ export class WageEvents extends LitElement {
     }
 
     _removeRaiseFromWageArray = () =>{
-        console.log(this)
+        //console.log(this)
     }
 
    

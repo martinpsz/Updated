@@ -1,5 +1,7 @@
 import { LitElement, html, css } from "lit";
-import { customElement, state } from "lit/decorators.js";
+import { customElement, property } from "lit/decorators.js";
+
+type selections = '% increase' | '% decrease' | 'hourly increase' | 'hourly decrease' | 'lump sum/bonus';
 
 @customElement('raise-select')
 export class RaiseSelect extends LitElement{
@@ -40,8 +42,13 @@ export class RaiseSelect extends LitElement{
         }
     `
 
-    @state()
-    _selected_option = '% increase'
+    @property()
+    selected_option!: selections;
+
+    constructor(){
+        super()
+        this.selected_option = '% increase';
+    }
 
     render() {
         return html`
@@ -49,15 +56,17 @@ export class RaiseSelect extends LitElement{
                 <label>Select raise event:</label>
                 <select @change=${this._raiseTypeSelection}>
                     <optgroup label="Percent Adjustment">
-                        <option value="% increase">% INCREASE</option>
-                        <option value="% decrease">% DECREASE</option>
-                    </optgroup>
+                        <option .value=${'% increase'} 
+                                ?selected=${this.selected_option === '% increase'}>
+                                % INCREASE</option>
+                        <option .value=${'% decrease'} ?selected=${this.selected_option === '% decrease'}>% DECREASE</option>
+                    </optgroup> 
                     <optgroup label="Hourly Adjustment">
-                        <option value="hourly increase">HOURLY INCREASE</option>
-                        <option value="hourly decrease">HOURLY DECREASE</option>
+                        <option .value=${'hourly increase'} ?selected=${this.selected_option === 'hourly increase'}>HOURLY INCREASE</option>
+                        <option .value=${'hourly decrease'} ?selected=${this.selected_option === 'hourly decrease'}>HOURLY DECREASE</option>
                     </optgroup>
                     <optgroup label="One-time Adjustment">
-                        <option value="lump sum/bonus">LUMP SUM/BONUS</option>
+                        <option .value=${'lump sum/bonus'} ?selected=${this.selected_option === 'lump sum/bonus'}>LUMP SUM/BONUS</option>
                     </optgroup>
                 </select>
             </div>
@@ -69,18 +78,18 @@ export class RaiseSelect extends LitElement{
 
         for(let i=0; i<options.length; i++){
             if(options[i].selected){
-                this._selected_option = options[i].value
-            }
+                this.selected_option = options[i].value as selections
+            } 
         }
 
         this.dispatchEvent(new CustomEvent('get-raise-type', {
-            detail: this._selected_option,
+            detail: this.selected_option,
             bubbles: true,
             composed: true
         }))
     }
 
-
+ 
 }
 
 declare global {

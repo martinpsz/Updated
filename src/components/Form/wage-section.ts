@@ -4,7 +4,7 @@ import '../Form/form-header';
 import '../Form/wage-events';
 import '../Form/special-increase'
 import {FieldLabels} from '../../config/settings.json';
-import {WageEvent} from '../../interfaces/interface.js';
+import {WageEvent, WageEventList} from '../../interfaces/interface.js';
 
 
 @customElement('wage-section')
@@ -29,7 +29,7 @@ export class WageSection extends LitElement {
     `
 
     @state()
-    _regularRaiseArray: Array<TemplateResult> = [];
+    _regularRaiseArray: TemplateResult[] = [];
 
     @property()
     RegularWageEvent!: WageEvent;
@@ -42,28 +42,30 @@ export class WageSection extends LitElement {
         return html`
             <form-header title=${FieldLabels.AcrossTheBoard.Header}></form-header>
             <wage-events id="first" 
+                         key=0
                          .RegularWageEvent=${this.RegularWageEvent}>
             </wage-events>
             ${this._regularRaiseArray.map((item) => item)}
+
             <button-comp buttonText=${FieldLabels.RaiseFields.AddRegularRaise} 
             primary
-            @click=${this._addRegularRaise}
+            @click={}
             icon="ic:baseline-add-chart">
             </button-comp>
             <special-increase .SpecialWageEvent=${this.SpecialWageEvent}></special-increase>
         `
     }
 
-    _addRegularRaise = () => {
-        this._regularRaiseArray = [...this._regularRaiseArray, html`<wage-events key=${this.RegularWageEvent.key = this._regularRaiseArray.length + 1}
-                                                                    .RegularWageEvent=${this.RegularWageEvent}></wage-events>`]
-
-        this.dispatchEvent(new CustomEvent('get_regular_wage_data', {
-            detail: this._regularRaiseArray,
-            bubbles: true,
-            composed: true
-        }))
-    }
+    /*_addRegularRaise = () => {
+        this._regularRaiseArray = [...this._regularRaiseArray,    html`<wage-events 
+                                                                        key=${this._regularRaiseArray.length}
+                                                                        effective_date=${this.RegularWageEvent?.effective_date}
+                                                                        wage_event_type=${this.RegularWageEvent?.wage_event_type}
+                                                                        wage_event_value=${this.RegularWageEvent?.wage_event_value}
+                                                                        starting_hourly=${this.RegularWageEvent?.starting_hourly}
+                                                                        starting_annual=${this.RegularWageEvent?.starting_annual}>
+                                                                    </wage-events>`]}*/
+    
 
     
 }
