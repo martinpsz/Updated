@@ -1,4 +1,4 @@
-import { LitElement, html, css, nothing } from "lit";
+import { LitElement, html, css, nothing, PropertyValueMap } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 import {FieldLabels} from '../../config/settings.json'
 import { debounce } from "../../utilities/debounce.js";
@@ -119,10 +119,10 @@ export class InputField extends LitElement {
             <div class="input-container">
                 <input type=${this.type} 
                        id=${this.label}
-                       min=${this.type === 'date' ? FieldLabels.InputFieldSettings.date.min : nothing}} 
+                       min=${this.type === 'date' ? FieldLabels.InputFieldSettings.date.min : nothing} 
                        max=${this.type === 'date' ? FieldLabels.InputFieldSettings.date.max : nothing}
                        required=${this.required ? this.required : nothing}
-                       .value=${this.value ? this.value : ''}
+                       .value=${this.type!=='file' ? this.value : ''}
                        @input=${debounce(this._getDebouncedInput)}
                        @change=${this._getOnChangeInput}/>
 
@@ -136,7 +136,6 @@ export class InputField extends LitElement {
     _getDebouncedInput = () => {
         const inputElement = this.renderRoot.querySelector('.input-container input') as HTMLInputElement;
         const inputValue = inputElement.value;
-        
         this.dispatchEvent(new CustomEvent('get-debounced-value', {
             detail: {
                 value: inputValue,
@@ -158,6 +157,7 @@ export class InputField extends LitElement {
             composed: true
         }))
     }
+
 }
 
 declare global {

@@ -66,7 +66,8 @@ export class UnitForm extends LitElement {
                              @get-inactive-status=${this._setInactiveStatus}
                              @get-wage-status=${this._setWageStatus}
                              @get-bargaining-status=${this._setBargainingStatus}
-                             @get-unit-status=${this._setUnitStatusData}>
+                             @get-unit-status=${this._setUnitStatusData}
+                             @get-feedback=${this._setUserFeedback}>
                 </unit-status>
             </form>
         `
@@ -99,7 +100,11 @@ export class UnitForm extends LitElement {
         this.unit_data = {...this.unit_data, number_of_members: memberCount, agreement_eff_date: contractStartDate, agreement_exp_date: contractEndDate, cba: CBAFile}
     }
 
+    _setUserFeedback = (e: CustomEvent) => {
+        this.unit_data = {...this.unit_data, comment: e.detail}
+    }
 
+    
     
 }
 

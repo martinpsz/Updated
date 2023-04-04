@@ -34,7 +34,7 @@ export class WageSection extends LitElement {
     protected render() {
         return html`
             <form-header title=${FieldLabels.AcrossTheBoard.Header}></form-header>
-            <wage-events id="first"></wage-events>
+            <wage-events id="first" key='0'></wage-events>
             ${this._regularRaiseArray.map((item) => item)}
             <button-comp buttonText=${FieldLabels.RaiseFields.AddRegularRaise} 
             primary
@@ -46,8 +46,10 @@ export class WageSection extends LitElement {
     }
 
     _addRegularRaise = () => {
-        this._regularRaiseArray = [...this._regularRaiseArray, html`<wage-events></wage-events>`]
+        this._regularRaiseArray = [...this._regularRaiseArray, html`<wage-events key=${this._regularRaiseArray.length + 1}></wage-events>`]
     }
+
+    
 }
 
 declare global {

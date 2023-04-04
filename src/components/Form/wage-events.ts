@@ -107,85 +107,118 @@ export class WageEvents extends LitElement {
     specialRaise = false;
 
     @property()
-    effectiveDate!: string;
+    key!: WageEvent['key'];
 
-    @state()
-    _raiseType!: "% increase" | "% decrease" | "hourly increase" | "hourly decrease" | "lump sum/bonus";
+    @property({type: String})
+    effective_date!: WageEvent['effective_date']; 
 
-    @state()
-    _regularWageEvents: Array<TemplateResult> = [] ;
+    @property()
+    wage_event_type: WageEvent['wage_event_type'] = '% increase';
 
-    @state()
-    _specialWageEvents: Array<TemplateResult> = [];
+    @property()
+    wage_event_value!: WageEvent['wage_event_value'];
 
-    constructor(){
-        super();
-        this._raiseType = "% increase"
-    }
+    @property()
+    starting_hourly!: WageEvent['starting_hourly'];
+
+    @property()
+    starting_annual!: WageEvent['starting_annual'];
+
+    @property()
+    num_affected!: WageEvent['num_affected'];
+
+    @property()
+    description!: WageEvent['description'];
+
+    @property()
+    supporting_doc!: WageEvent['supporting_doc'];
+
+    @property()
+    regularWageEvent!: WageEvent;
+
+    @property()
+    specialWageEvent!: WageEvent;
+
 
 
     protected render(){
+        console.log('effective date at render: ', this.effective_date)
+    
         return html`
             <div class="wage-event ${this.specialRaise && 'special-raise'}">
                 <input-field label=${FieldLabels.RaiseFields.EffectiveDate} 
-                             type="date"
-                             @get-debounced-value=${this._setEffectiveDate}
+                             type='date'
+                             value=${this.effective_date}
+                             @get-debounced-value=${(e: CustomEvent) => this.handleInput(e, 'effective_date')}
                              id="effective-date">
                 </input-field>
                 <raise-select label=${FieldLabels.RaiseFields.SelectRaise}
-                              @get-raise-type=${this._setRaiseType}
+                              value=${this.wage_event_type}
                               id="raise-select">
                 </raise-select>
-                ${this._raiseType === "% increase" || this._raiseType === "% decrease" ? html`
+                ${this.wage_event_type === "% increase" || this.wage_event_type === "% decrease" ? html`
                     <div class="field-with-span" id="raise-amount">
-                        <input-field label=${this._raiseType} type="number">
+                        <input-field label=${this.wage_event_type} 
+                                     type="number"
+                                     value=${this.wage_event_value}
+                                     >
                         </input-field>
-                        <span class=${this._raiseType === '% decrease' && 'red'}>%</span>
+                        <span class=${this.wage_event_type === '% decrease' && 'red'}>%</span>
                     <div>
                 ` : html`
                     <div class="field-with-span" id="raise-amount">
-                        <input-field label=${this._raiseType} type="number"></input-field>
-                        <span class=${this._raiseType === 'hourly decrease' && 'red'}>$</span>
+                        <input-field label=${this.wage_event_type} 
+                                     type="number"
+                                     value=${this.wage_event_value}
+                                     >
+                        </input-field>
+                        <span class=${this.wage_event_type === 'hourly decrease' && 'red'}>$</span>
                     </div>
                     <div class="field-with-span" id="starting-wage">
-                        <input-field label=${this._raiseType === 'lump sum/bonus' ? 'Starting Annual' : 'Starting Hourly'} type="number"></input-field>
+                        <input-field label=${this.wage_event_type === 'lump sum/bonus' ? 'Starting Annual' : 'Starting Hourly'} 
+                        type="number"
+                        value=${this.wage_event_type === 'lump sum/bonus' ? this.starting_annual : this.starting_hourly}></input-field>
                         <span>$</span>
                     </div>
                 `}
                 <span class='remove' @click=${this._removeRaiseFromWageArray}>&#x2715;</span>
                 ${this.specialRaise ? html`
-                    <input-field label=${FieldLabels.RaiseFields.NumberAffected} type="number" id="num-affected">
+                    <input-field label=${FieldLabels.RaiseFields.NumberAffected}    type="number" id="num-affected" value=${this.num_affected}>
                     </input-field>
-                    <input-field label=${FieldLabels.RaiseFields.Description} type="text" id="description">
+                    <input-field label=${FieldLabels.RaiseFields.Description} type="text" id="description" value=${this.description}>
                     </input-field>
-                    <input-field label=${FieldLabels.RaiseFields.FileUpload} type="file" id="upload">
+                    <input-field label=${FieldLabels.RaiseFields.FileUpload} type="file" id="upload" value=${this.supporting_doc}>
                 ` : nothing}
             </div>
         `
     }
 
-    _setRaiseType = (e: CustomEvent) =>{
-        this._raiseType = e.detail;
+    handleInput = (e: CustomEvent, eventLabel: string) => {
+        if(eventLabel === 'effective_date'){
+            this.effective_date = e.detail.value;
+        }
+    }
+
+    _set_wage_event_type = (e: CustomEvent) =>{
+        this.wage_event_type = e.detail;
     }
 
     _setEffectiveDate = (e: CustomEvent) =>{
         const component = e.target as any; //fix type here
         const input = component?.renderRoot.querySelector('input')
-        const inputVal = Date.parse(input?.value)
+        const inputVal = input?.value
+        const inputValParsed = Date.parse(input?.value)
 
         const minDate = Date.parse(FieldLabels.InputFieldSettings.date.min)
         const maxDate = Date.parse(FieldLabels.InputFieldSettings.date.max)
     
-        if(minDate <= inputVal && inputVal <= maxDate){ 
-            console.log('Value in range')
+        if(minDate <= inputValParsed && inputValParsed <= maxDate){ 
             input?.setCustomValidity('')
+            return inputVal;
         }
         else{
-            
-            console.log('Value of out range')
             input?.setCustomValidity(FieldLabels.Errors.DateOutOfRange)
             input?.reportValidity()
-            //this.effectiveDate = inputVal;
         }
     }
 
@@ -193,6 +226,11 @@ export class WageEvents extends LitElement {
         console.log(this)
     }
 
+   
+
+    
+    
+    
 }
 
 declare global {

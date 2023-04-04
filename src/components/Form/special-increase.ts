@@ -38,7 +38,7 @@ export class SpecialIncrease extends LitElement {
                 <radio-prompt prompt=${QuestionSpecialRaise}
                               @get-toggle-selection=${this._setSpecialRaise}>
                 </radio-prompt>
-                ${this._specialRaise ? html`<wage-events specialRaise id="first"></wage-events>
+                ${this._specialRaise ? html`<wage-events specialRaise id="first" key='0'></wage-events>
                 ${this._specialRaiseArray.map((item) => item)}
                 <button-comp buttonText=${FieldLabels.RaiseFields.AddSpecialRaise} 
                 primary
@@ -58,7 +58,7 @@ export class SpecialIncrease extends LitElement {
     }
 
     _addSpecialRaise = () => {
-        this._specialRaiseArray = [...this._specialRaiseArray, html`<wage-events specialRaise></wage-events>`]
+        this._specialRaiseArray = [...this._specialRaiseArray, html`<wage-events specialRaise key=${this._specialRaiseArray.length + 1}></wage-events>`]
     }
 }
 

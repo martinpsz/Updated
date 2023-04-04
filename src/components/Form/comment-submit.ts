@@ -4,6 +4,7 @@ import {FieldLabels} from '../../config/settings.json';
 import '../Form/form-header'
 import '../atoms/radio-prompt'
 import '../atoms/button-comp'
+import { debounce } from "../../utilities/debounce.js";
 
 @customElement('comment-submit')
 export class TextArea extends LitElement {
@@ -49,13 +50,23 @@ export class TextArea extends LitElement {
                           initialChecked='Yes'
                           @get-toggle-selection=${this._setToggleSelection}>
             </radio-prompt>
-            ${this._comments === 'Yes' ? html`<textarea placeholder="Enter your comments here"></textarea>` : nothing}
+            ${this._comments === 'Yes' ? html`<textarea placeholder="Enter your comments here" @input=${debounce(this._getFeedback)}></textarea>` : nothing}
             <button-comp  buttonText="Save This Report" icon="material-symbols:attach-file-add-rounded"></button-comp>
         `
     }
 
     _setToggleSelection = (e: CustomEvent) => {
         this._comments = e.detail;
+    }
+
+    _getFeedback = () => {
+        const feedback = this.renderRoot.querySelector('textarea')?.value
+
+        this.dispatchEvent(new CustomEvent('get-feedback', {
+            detail: feedback,
+            bubbles: true,
+            composed: true
+        }))
     }
 }
 

@@ -30,15 +30,16 @@ export interface ProcessedData {
 }
 
 export interface WageEvent {
+    key: string | null;
     wage_event: 'Regular' | 'Special';
-    effective_date: string;
+    effective_date: string | null | undefined;
     wage_event_type: '% increase' | '% decrease' | 'hourly increase' | 'hourly decrease' | 'lump sum/bonus';
-    wage_event_value: number | string;
+    wage_event_value: number | string | null;
     starting_hourly: number | null;
     starting_annual: number | null;
-    num_affected: number | null;
-    description: string | null;
-    supporting_doc: File | null;
+    num_affected?: number | null;
+    description?: string | null;
+    supporting_doc?: File | null;
 }
 
 export interface FormPayload {
@@ -66,3 +67,4 @@ export interface FormPayload {
     filing_status: 'NEEDS REVIEW' | 'SUBMITTED' | 'APPROVED';
     notes: string | null; 
 }
+
