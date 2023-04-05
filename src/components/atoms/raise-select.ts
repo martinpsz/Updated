@@ -40,6 +40,10 @@ export class RaiseSelect extends LitElement{
         select:focus{
             outline: transparent;
         }
+
+        option{
+            font-family: var(--font-family);
+        }
     `
 
     @property()
