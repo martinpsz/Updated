@@ -201,7 +201,9 @@ export class WageEvents extends LitElement {
     _update_wage_event = (e: CustomEvent, event_type: string) => {
         switch(event_type){
             case 'effective_date':
-                this.RegularWageEvent = {...this.RegularWageEvent, effective_date: e.detail?.value}
+                const checkedDate = this._setEffectiveDate(e, e.detail.value)
+                
+                this.RegularWageEvent = {...this.RegularWageEvent, effective_date: checkedDate}
                 break;
             case 'wage_event_type':
                 this.RegularWageEvent = {...this.RegularWageEvent, wage_event_type: e.detail.toLowerCase(), wage_event_value: null, starting_hourly: null, starting_annual: null}
@@ -227,25 +229,28 @@ export class WageEvents extends LitElement {
     }
 
 
-
-    _setEffectiveDate = (e: CustomEvent) =>{
+    _setEffectiveDate = (e: any, date:any) => {
         const component = e.target as any; //fix type here
         const input = component?.renderRoot.querySelector('input')
-        const inputVal = input?.value
-        const inputValParsed = Date.parse(input?.value)
+        const dateVal = date
+        const dateValParsed = Date.parse(dateVal)
 
         const minDate = Date.parse(FieldLabels.InputFieldSettings.date.min)
         const maxDate = Date.parse(FieldLabels.InputFieldSettings.date.max)
     
-        if(minDate <= inputValParsed && inputValParsed <= maxDate){ 
+        
+        if(minDate <= dateValParsed && dateValParsed <= maxDate){ 
             input?.setCustomValidity('')
-            return inputVal;
         }
         else{
             input?.setCustomValidity(FieldLabels.Errors.DateOutOfRange)
             input?.reportValidity()
         }
+
+        return dateVal
     }
+
+   
 
     _removeRaiseFromWageArray = () =>{
         //console.log(this)
