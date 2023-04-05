@@ -153,7 +153,7 @@ export class WageEvents extends LitElement {
                              id="effective-date">
                 </input-field>
                 <raise-select label=${FieldLabels.RaiseFields.SelectRaise}
-                              value=${this.RegularWageEvent?.wage_event_type}
+                              selected_option=${this.RegularWageEvent?.wage_event_type}
                               @get-raise-type=${(e: CustomEvent) => this._update_wage_event(e, 'wage_event_type')}
                               id="raise-select">
                 </raise-select>
