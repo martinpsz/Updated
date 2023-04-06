@@ -5,7 +5,7 @@ import '../Form/employer-fields';
 import '../Form/reporter-fields';
 import '../Form/unit-status';
 import '../Form/status-bar'
-import { Unit, WageEvent, FormPayload, Contact } from "../../interfaces/interface.js";
+import { FormPayload} from "../../interfaces/interface.js";
 
 
 @customElement('unit-form')
@@ -60,6 +60,8 @@ export class UnitForm extends LitElement {
                 <unit-status memberCount=${this.form_data?.number_of_members}
                              contractStartDate=${this.form_data?.agreement_eff_date}
                              contractEndDate=${this.form_data?.agreement_exp_date}
+                             .cba_file=${this.form_data?.cba_file}
+                             @get-unit-status=${this._setUnitStatusData}
                              .RegularWageEvent=${this.form_data?.regular_wage_events[0]}
                              .SpecialWageEvent=${this.form_data?.special_wage_events[0]}
                              comment=${this.form_data?.comment}
@@ -79,6 +81,11 @@ export class UnitForm extends LitElement {
         this.form_data = {...this.form_data, contact: {...this.form_data.contact, name: reporter, email: email, phone: phone}}
     }
 
+    _setUnitStatusData = (e: CustomEvent) => {
+        const {memberCount, contractStartDate, contractEndDate, cba_file} = e.detail;
+        this.form_data = {...this.form_data, number_of_members: memberCount, agreement_eff_date: contractStartDate, agreement_exp_date: contractEndDate, cba_file: cba_file}
+    }
+
     
 
     /*_setInactiveStatus = (e: CustomEvent) => {
@@ -93,10 +100,6 @@ export class UnitForm extends LitElement {
         this.unit_data = {...this.unit_data, bargaining_status: e.detail}
     }
 
-    _setUnitStatusData = (e: CustomEvent) => {
-        const {memberCount, contractStartDate, contractEndDate, CBAFile} = e.detail;
-        this.unit_data = {...this.unit_data, number_of_members: memberCount, agreement_eff_date: contractStartDate, agreement_exp_date: contractEndDate, cba: CBAFile}
-    }
 
     _setUserFeedback = (e: CustomEvent) => {
         this.unit_data = {...this.unit_data, comment: e.detail}

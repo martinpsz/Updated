@@ -5,11 +5,12 @@ import '../atoms/raise-select';
 import './form-header';
 import '../atoms/button-comp';
 import {FieldLabels} from '../../config/settings.json';
-import {WageEventList, WageEvent} from '../../interfaces/interface.js';
+import {WageEventInterface} from '../../interfaces/interface.js';
+import {wageValueAdjusted} from '../Form/utilities/wageValueAdjusted.js';
 
 
-@customElement('wage-events')
-export class WageEvents extends LitElement {
+@customElement('wage-event')
+export class WageEvent extends LitElement {
     static styles = css`
         :host{
             display: flex;
@@ -103,97 +104,77 @@ export class WageEvents extends LitElement {
 
     `
 
-    @property({type: Boolean})
-    specialRaise = false;
-
     @property()
-    key!: WageEvent['key'];
+    key!: WageEventInterface['key'];
 
     @property({type: String})
-    effective_date!: WageEvent['effective_date']; 
+    effective_date!: WageEventInterface['effective_date']; 
 
     @property()
-    wage_event_type: WageEvent['wage_event_type'] = '% increase';
+    wage_event_type: WageEventInterface['wage_event_type'] = '% increase';
 
     @property()
-    wage_event_value!: WageEvent['wage_event_value'];
+    wage_event_value!: WageEventInterface['wage_event_value'];
 
     @property()
-    starting_hourly!: WageEvent['starting_hourly'];
+    starting_value!: WageEventInterface['starting_value'];
 
     @property()
-    starting_annual!: WageEvent['starting_annual'];
+    num_affected!: WageEventInterface['num_affected'];
 
     @property()
-    num_affected!: WageEvent['num_affected'];
+    description!: WageEventInterface['description'];
 
     @property()
-    description!: WageEvent['description'];
+    supporting_doc!: WageEventInterface['supporting_doc'];
 
     @property()
-    supporting_doc!: WageEvent['supporting_doc'];
-
-    @property()
-    RegularWageEvent!: WageEvent;
-
-    @property()
-    SpecialWageEvent!: WageEvent;
-
-
-
+    RegularWageEvent!: WageEventInterface;
 
     protected render(){
-        console.log(this.RegularWageEvent)
         return html`
-            <div class="wage-event ${this.specialRaise && 'special-raise'}">
+            <div class="wage-event" key=${this.RegularWageEvent?.key}>
                 <input-field label=${FieldLabels.RaiseFields.EffectiveDate} 
                              type='date'
-                             value=${this.RegularWageEvent?.effective_date}
+                             value=${this.effective_date}
                              @get-debounced-value=${(e:CustomEvent) => this._update_wage_event(e, 'effective_date')}
                              id="effective-date">
                 </input-field>
                 <raise-select label=${FieldLabels.RaiseFields.SelectRaise}
-                              selected_option=${this.RegularWageEvent?.wage_event_type}
+                              selected_option=${this.wage_event_type}
                               @get-raise-type=${(e: CustomEvent) => this._update_wage_event(e, 'wage_event_type')}
                               id="raise-select">
                 </raise-select>
-                ${this.RegularWageEvent?.wage_event_type === "% increase" || this.RegularWageEvent?.wage_event_type === "% decrease" ? html`
+                ${this.wage_event_type === "% increase" || this.wage_event_type === "% decrease" ? html`
                     <div class="field-with-span" id="raise-amount">
-                        <input-field label=${this.RegularWageEvent?.wage_event_type} 
+                        <input-field label=${this.wage_event_type} 
                                      type="number"
-                                     value=${this.RegularWageEvent?.wage_event_value}
+                                     value=${this.wage_event_value}
                                     @get-debounced-value=${(e:CustomEvent) => this._update_wage_event(e, 'wage_event_value')}
                                      >
                         </input-field>
-                        <span class=${this.RegularWageEvent?.wage_event_type === '% decrease' && 'red'}>%</span>
+                        <span class=${this.wage_event_type === '% decrease' && 'red'}>%</span>
                     <div>
                 ` : html`
                     <div class="field-with-span" id="raise-amount">
-                        <input-field label=${this.RegularWageEvent?.wage_event_type} 
+                        <input-field label=${this.wage_event_type} 
                                      type="number"
-                                     value=${this.RegularWageEvent?.wage_event_value}
+                                     value=${this.wage_event_value}
                                     @get-debounced-value=${(e:CustomEvent) => this._update_wage_event(e, 'wage_event_value')}
                                      >
                         </input-field>
-                        <span class=${this.RegularWageEvent?.wage_event_type === 'hourly decrease' && 'red'}>$</span>
+                        <span class=${this.wage_event_type === 'hourly decrease' && 'red'} @click=${this._gitremoveWageEvent}>$</span>
                     </div>
                     <div class="field-with-span" id="starting-wage">
-                        <input-field label=${this.RegularWageEvent?.wage_event_type === 'lump sum/bonus' ? 'Starting Annual' : 'Starting Hourly'} 
+                        <input-field label=${this.wage_event_type === 'lump sum/bonus' ? 'Starting Annual' : 'Starting Hourly'} 
                         type="number"
-                        value=${this.RegularWageEvent?.wage_event_type === 'lump sum/bonus' ? this.RegularWageEvent?.starting_annual : this.RegularWageEvent?.starting_hourly}
+                        value=${this.starting_value}
                         @get-debounced-value=${(e: CustomEvent) => this._update_wage_event(e, 'starting_pay')}>
                         </input-field>
                         <span>$</span>
                     </div>
                 `}
                 <span class='remove' @click=${this._removeRaiseFromWageArray}>&#x2715;</span>
-                ${this.specialRaise ? html`
-                    <input-field label=${FieldLabels.RaiseFields.NumberAffected} type="number" id="num-affected" value=${this.num_affected}>
-                    </input-field>
-                    <input-field label=${FieldLabels.RaiseFields.Description} type="text" id="description" value=${this.description}>
-                    </input-field>
-                    <input-field label=${FieldLabels.RaiseFields.FileUpload} type="file" id="upload" value=${this.supporting_doc}>
-                ` : nothing}
             </div>
         `
     }
@@ -202,30 +183,34 @@ export class WageEvents extends LitElement {
         switch(event_type){
             case 'effective_date':
                 const checkedDate = this._setEffectiveDate(e, e.detail.value)
-                
-                this.RegularWageEvent = {...this.RegularWageEvent, effective_date: checkedDate}
+                this.effective_date = checkedDate;
                 break;
             case 'wage_event_type':
-                this.RegularWageEvent = {...this.RegularWageEvent, wage_event_type: e.detail.toLowerCase(), wage_event_value: null, starting_hourly: null, starting_annual: null}
+                this.wage_event_type = e.detail.toLowerCase()
                 break;
             case 'wage_event_value':
-                console.log(`Wage event value`, e.detail.value)
-                if(this.RegularWageEvent.wage_event_type === '% increase' || this.RegularWageEvent.wage_event_type === '% decrease'){
-                    this.RegularWageEvent = {...this.RegularWageEvent, wage_event_value: e.detail?.value}
-                } else if (this.RegularWageEvent.wage_event_type === 'lump sum/bonus' || this.RegularWageEvent.wage_event_type === 'hourly increase' || this.RegularWageEvent.wage_event_type === 'hourly decrease') {
-                    this.RegularWageEvent = {...this.RegularWageEvent, wage_event_value: e.detail?.value}
-                }
+                this.wage_event_value = e.detail?.value
                 break;
             case 'starting_pay':
-                console.log(`Starting pay`, e.detail.value)
-                if(this.RegularWageEvent.wage_event_type === 'lump sum/bonus'){
-                    this.RegularWageEvent = {...this.RegularWageEvent, starting_annual: e.detail?.value, starting_hourly: null}
-                } else if (this.RegularWageEvent.wage_event_type === 'hourly increase' || this.RegularWageEvent.wage_event_type === 'hourly decrease') {
-                    this.RegularWageEvent = {...this.RegularWageEvent, starting_hourly: e.detail?.value, starting_annual: null}
-                } 
-                break;
-                
+                this.starting_value = e.detail?.value
+                break;   
         }
+
+
+        this.RegularWageEvent = {
+                key: this.key,
+                effective_date: this.effective_date,
+                wage_event_type: this.wage_event_type,
+                wage_event_value: wageValueAdjusted(this.wage_event_type, this.wage_event_value),
+                starting_value: this.wage_event_type === '% increase' || this.wage_event_type === '% decrease' ? null : '$'+this.starting_value,
+        }
+
+
+        this.dispatchEvent(new CustomEvent('get-wage-event-data', {
+            detail: this.RegularWageEvent,
+            bubbles: true,
+            composed: true
+        }))
     }
 
 
@@ -265,6 +250,6 @@ export class WageEvents extends LitElement {
 
 declare global {
     interface HTMLElementTagNameMap {
-        'wage-events': WageEvents;
+        'wage-event': WageEvent;
     }
 }

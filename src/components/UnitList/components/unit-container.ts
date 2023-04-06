@@ -16,7 +16,7 @@ export class UnitContainer extends LitElement {
                 display: block;
                 height: 40vh;
                 overflow-y: scroll;
-                background: rgb(var(--black));
+                //background: rgb(var(--black));
                 padding: 0.25em;
                 //width: 50%;
             }

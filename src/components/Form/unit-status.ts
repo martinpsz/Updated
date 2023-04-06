@@ -6,7 +6,7 @@ import '../atoms/radio-prompt';
 import '../atoms/input-field';
 import '../Form/wage-section';
 import '../Form/comment-submit';
-import {WageEvent} from '../../interfaces/interface.js';
+import {WageEventInterface} from '../../interfaces/interface.js';
 
 @customElement('unit-status')
 export class UnitStatus extends LitElement {
@@ -44,16 +44,16 @@ export class UnitStatus extends LitElement {
     contractEndDate!: string;
 
     @property({type: File})
-    CBAFile!: File;
+    cba_file!: File;
 
     @property({type: String})
     comment!: string;
 
     @property()
-    RegularWageEvent!: WageEvent;
+    RegularWageEvent!: WageEventInterface;
 
     @property()
-    SpecialWageEvent!: WageEvent;
+    SpecialWageEvent!: WageEventInterface;
 
 
     constructor(){
@@ -72,6 +72,7 @@ export class UnitStatus extends LitElement {
             question: '',
             toggleSelection: 'No'
         }
+
     }
 
 
@@ -103,6 +104,7 @@ export class UnitStatus extends LitElement {
                         </input-field>
                         <input-field label=${CBAUpload} 
                                      type="file"
+                                     value=${this.cba_file?.name}
                                      @get-onchange-value=${(e: CustomEvent) => this._setUnitStatusFields(e)}>
                         </input-field>
                     </div>
@@ -179,7 +181,7 @@ export class UnitStatus extends LitElement {
                 this.contractEndDate = value;
                 break;
             case 'Upload Latest CBA':
-                this.CBAFile = value[0];
+                this.cba_file = value[0];
                 break;
         }
 
@@ -188,7 +190,7 @@ export class UnitStatus extends LitElement {
                 memberCount: this.memberCount,
                 contractStartDate: this.contractStartDate,
                 contractEndDate: this.contractEndDate,
-                CBAFile: this.CBAFile
+                cba_file: this.cba_file
             },
             bubbles: true,
             composed: true
@@ -196,7 +198,7 @@ export class UnitStatus extends LitElement {
         
     }
 
-
+    
 
 }
 

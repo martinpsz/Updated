@@ -5,7 +5,7 @@ import '../components/html-footer';
 import '../components/UnitList/index';
 import '../components/atoms/input-field';
 import '../components/Form/index.js'
-import {FormPayload, Unit, WageEvent} from '../interfaces/interface.js';
+import {FormPayload, Unit, WageEventInterface} from '../interfaces/interface.js';
 
 @customElement('minimum-dues')
 export class MinimumDues extends LitElement {
@@ -76,37 +76,36 @@ export class MinimumDues extends LitElement {
             return unit;
         }
 
-        const form_data_with_deleted_props = deleteProps(unit, ['master', 'master_id', 'master_name', 'report_individually', 'state'])
+        const form_data_with_deleted_props = deleteProps(unit, ['master', 'master_id', 'master_name', 'report_individually', 'state', 'chapter'])
 
         //initialize values for form_data
         const form_fields = {
             inactive_status: "No" as FormPayload['inactive_status'],
             wage_status: 'Yes' as FormPayload['wage_status'],
             bargaining_status: null,
-            cba_file: null,
+            cba_file : new File([], ''),
             comment: '',
             regular_wage_events: [
                 {
                     key: '0',
-                    effective_date: '',
-                    wage_event_type: '% increase' as WageEvent['wage_event_type'], 
-                    wage_event_value: null,
-                    starting_hourly: null,
-                    starting_annual: null,
+                    effective_date: '' as WageEventInterface['effective_date'],
+                    wage_event_type: '% increase' as WageEventInterface['wage_event_type'], 
+                    wage_event_value: null as WageEventInterface['wage_event_value'],
+                    starting_value: null as WageEventInterface['starting_value'],
+                    
                 }
             ],
 
             special_wage_events: [
                 {
                     key: '0',
-                    effective_date: '',
-                    wage_event_type: '% increase' as WageEvent['wage_event_type'],
-                    wage_event_value: null,
-                    starting_hourly: null,
-                    starting_annual: null,
-                    num_affected: null,
-                    description: null,
-                    supporting_doc: null,
+                    effective_date: '' as WageEventInterface['effective_date'],
+                    wage_event_type: '% increase' as WageEventInterface['wage_event_type'],
+                    wage_event_value: null as WageEventInterface['wage_event_value'],
+                    starting_value: null as WageEventInterface['starting_value'],
+                    num_affected: null as WageEventInterface['num_affected'],
+                    description: null as WageEventInterface['description'],
+                    supporting_doc: new File([], '') as WageEventInterface['supporting_doc'],
                 }
 
             ],

@@ -122,7 +122,7 @@ export class InputField extends LitElement {
                        min=${this.type === 'date' ? FieldLabels.InputFieldSettings.date.min : nothing} 
                        max=${this.type === 'date' ? FieldLabels.InputFieldSettings.date.max : nothing}
                        required=${this.required ? this.required : nothing}
-                       .value=${this.type!=='file' ? this.value : ''}
+                       .value=${this.type!=='file' ? this.value : nothing}
                        @input=${debounce(this._getDebouncedInput)}
                        @change=${this._getOnChangeInput}/>
 
@@ -147,7 +147,8 @@ export class InputField extends LitElement {
     _getOnChangeInput = (e: InputEvent) => {
         const inputTarget = e.target as HTMLInputElement;
         const inputValue = inputTarget.value;
-        const inputFile = inputTarget.type === 'file' ? inputTarget.files : null;
+        const inputFile = inputTarget.type === 'file' ? inputTarget.files : '';
+
         this.dispatchEvent(new CustomEvent('get-onchange-value', {
             detail: {
                 value: inputTarget.type === 'file' ? inputFile : inputValue,
