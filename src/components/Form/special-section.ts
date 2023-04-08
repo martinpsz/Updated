@@ -41,6 +41,9 @@ export class SpecialSection extends LitElement {
     @property()
     SpecialWageEvent!: WageEventInterface;
 
+    @property()
+    section_notes!: string;
+
     constructor(){
         super()
 
@@ -50,10 +53,9 @@ export class SpecialSection extends LitElement {
 
 
     protected render() {
-        console.log(this._specialWageEventArray)
         let {Header, QuestionSpecialRaise} = FieldLabels.SpecialIncreases;
         return html`
-            <form-header title=${Header}></form-header>
+            <form-header title=${Header} warning=${this.section_notes}></form-header>
             <div>
                 <radio-prompt prompt=${QuestionSpecialRaise}
                               @get-toggle-selection=${this._setSpecialRaise}>
@@ -77,6 +79,7 @@ export class SpecialSection extends LitElement {
         if(this._specialRaise === false){
             this._specialRaiseArray = [];
             this._specialWageEventArray = [];
+            this.section_notes = '';
         }
     }
 
@@ -128,6 +131,24 @@ export class SpecialSection extends LitElement {
             bubbles: true,
             composed: true
         }))
+
+        //Section error handling:
+
+        this._specialWageEventArray.forEach((wageEvent) => {
+            console.log(wageEvent)
+            if ((wageEvent.wage_event_type === 'hourly increase' || wageEvent.wage_event_type === 'hourly decrease') && wageEvent.starting_value === null){
+                this.section_notes = FieldLabels.Errors.StartingHourlyMissing;
+            }
+
+            else if(wageEvent.wage_event_type === 'lump sum/bonus' && wageEvent.starting_value === null){
+                this.section_notes = FieldLabels.Errors.StartingAnnualMissing;
+            }
+    
+            else {
+                this.section_notes = ''
+            }
+    
+        })
         
     }
 

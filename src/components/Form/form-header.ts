@@ -20,11 +20,13 @@ export class FormHeader extends LitElement {
             color: rgb(var(--white));
             font-family: var(--font-family);
             font-weight: 200;
-            text-align: center;
+
         }
 
         p:not(:empty){
-            margin-top: -1.1em;
+            margin-top: -1.25em;
+            padding: 0.5em;
+
         }
     
     `

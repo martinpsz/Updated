@@ -132,6 +132,7 @@ export class SpecialEvent extends LitElement {
 
 
     protected render(){
+        console.log('The event type is: ', this.wage_event_type)
         return html`
             <div class="wage-event special-raise" key=${this.SpecialWageEvent.key}>
                 <input-field label=${FieldLabels.RaiseFields.EffectiveDate} 
@@ -145,7 +146,7 @@ export class SpecialEvent extends LitElement {
                               @get-raise-type=${(e: CustomEvent) => this._update_special_event(e, 'wage_event_type')}
                               id="raise-select">
                 </raise-select>
-                ${this.wage_event_type === "% increase" || "% decrease" ? html`
+                ${this.wage_event_type === "% increase" || this.wage_event_type === "% decrease" ? html`
                     <div class="field-with-span" id="raise-amount">
                         <input-field label=${this.wage_event_type} 
                                      type="number"
@@ -217,7 +218,7 @@ export class SpecialEvent extends LitElement {
             effective_date: this.effective_date,
             wage_event_type: this.wage_event_type,
             wage_event_value: wageValueAdjusted(this.wage_event_type, this.wage_event_value),
-            starting_value: this.wage_event_type === '% increase' || this.wage_event_type === '% decrease' ? '' : '$'+this.starting_value,
+            starting_value: this.wage_event_type === '% increase' || this.wage_event_type === '% decrease' ? null : this.starting_value ? '$'+this.starting_value : null,
             num_affected: this.num_affected,
             description: this.description,
             supporting_doc: this.supporting_doc

@@ -44,6 +44,9 @@ export class WageSection extends LitElement {
     @property()
     SpecialWageEvent!: WageEventInterface;
 
+    @property()
+    section_notes!: string;
+
     constructor(){
         super()
 
@@ -54,7 +57,7 @@ export class WageSection extends LitElement {
 
     protected render() {
         return html`
-            <form-header title=${FieldLabels.AcrossTheBoard.Header}></form-header>
+            <form-header title=${FieldLabels.AcrossTheBoard.Header} warning=${this.section_notes}></form-header>
 
             <wage-event id="first" key='0' .RegularWageEvent=${this.RegularWageEvent} @get-wage-event-data=${(e:CustomEvent) => this._setRegularWageEvent(e, 'ADD-RAISE')}></wage-event>
 
@@ -117,9 +120,25 @@ export class WageSection extends LitElement {
             bubbles: true,
             composed: true
         }))
+
+        //Section error handling:
+
+        this._regularWageEventArray.forEach((wageEvent) => {
+            if ((wageEvent.wage_event_type === 'hourly increase' || wageEvent.wage_event_type === 'hourly decrease') && wageEvent.starting_value === null){
+                this.section_notes = FieldLabels.Errors.StartingHourlyMissing;
+            }
+
+            else if(wageEvent.wage_event_type === 'lump sum/bonus' && wageEvent.starting_value === null){
+                this.section_notes = FieldLabels.Errors.StartingAnnualMissing;
+            }
+    
+            else {
+                this.section_notes = ''
+            }
+    
+        })
         
     }
-
 
     
     

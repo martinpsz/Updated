@@ -43,7 +43,6 @@ export class UnitForm extends LitElement {
     form_data!: FormPayload;
 
     protected render() {
-        console.log(this.form_data)
         return html`
             <status-bar></status-bar>
             <form>

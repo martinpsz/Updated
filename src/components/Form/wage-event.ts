@@ -131,6 +131,7 @@ export class WageEvent extends LitElement {
     @property()
     RegularWageEvent!: WageEventInterface;
 
+
     protected render(){
         return html`
             <div class="wage-event" key=${this.RegularWageEvent?.key}>
@@ -212,7 +213,7 @@ export class WageEvent extends LitElement {
                 effective_date: this.effective_date,
                 wage_event_type: this.wage_event_type,
                 wage_event_value: wageValueAdjusted(this.wage_event_type, this.wage_event_value),
-                starting_value: this.wage_event_type === '% increase' || this.wage_event_type === '% decrease' ? null : '$'+this.starting_value,
+                starting_value: this.wage_event_type === '% increase' || this.wage_event_type === '% decrease' ? null : this.starting_value ? '$'+this.starting_value : null,
         }
 
 
@@ -221,6 +222,7 @@ export class WageEvent extends LitElement {
             bubbles: true,
             composed: true
         }))
+
     }
 
 
