@@ -35,7 +35,7 @@ export class UnitStatus extends LitElement {
     _bargainingStatus!: {question: string, toggleSelection : 'Yes' | 'No'};
 
     @property({type: Number})
-    memberCount!: number;
+    number_of_members!: number;
 
     @property({type: String})
     contractStartDate!: string;
@@ -54,6 +54,9 @@ export class UnitStatus extends LitElement {
 
     @property()
     SpecialWageEvent!: WageEventInterface;
+
+    @property()
+    section_notes!: string;
 
 
     constructor(){
@@ -77,9 +80,10 @@ export class UnitStatus extends LitElement {
 
 
     protected render() {
+        console.log(this.number_of_members)
         let {Header, QuestionActive, MemberCount, ContractDates, CBAUpload, QuestionWages, QuestionBargaining} = FieldLabels.UnitStatus;
         return html`
-            <form-header title=${Header}></form-header>
+            <form-header title=${Header} warning=${this.section_notes}></form-header>
             <div class="unit-status">
                 <radio-prompt prompt=${QuestionActive} 
                               initialChecked="No"
@@ -89,8 +93,8 @@ export class UnitStatus extends LitElement {
                     <div class="unit-status-meta">
                         <input-field label=${MemberCount} 
                                      type="number"
-                                     value=${this.memberCount}
-                                     @get-onchange-value=${(e: CustomEvent) => this._setUnitStatusFields(e)}>
+                                     value=${this.number_of_members}
+                                     @get-debounced-value=${(e: CustomEvent) => this._setUnitStatusFields(e)}>
                         </input-field>
                         <input-field label=${ContractDates.Start} 
                                      type="date"
@@ -172,7 +176,7 @@ export class UnitStatus extends LitElement {
         const {label, value} = e.detail;
         switch(label){
             case 'Number of members':
-                this.memberCount = value;
+                this.number_of_members = parseInt(value) ? parseInt(value) : 0;
                 break;
             case 'Latest CBA Start':
                 this.contractStartDate = value;
@@ -187,7 +191,7 @@ export class UnitStatus extends LitElement {
 
         this.dispatchEvent(new CustomEvent('get-unit-status', {
             detail: {
-                memberCount: this.memberCount,
+                memberCount: this.number_of_members,
                 contractStartDate: this.contractStartDate,
                 contractEndDate: this.contractEndDate,
                 cba_file: this.cba_file
@@ -195,6 +199,13 @@ export class UnitStatus extends LitElement {
             bubbles: true,
             composed: true
         }))
+
+        //Section error handling:
+        if(this.number_of_members >= 1000 && this.cba_file.name === ''){
+            this.section_notes = FieldLabels.Errors.ContractRequired;
+        } else {
+            this.section_notes = ''
+        }
         
     }
 

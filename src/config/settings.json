@@ -66,7 +66,8 @@
         "Errors": {
             "DateOutOfRange": "Only increases or decreases effective 8/1/2022-7/31/2023 can be recorded in this year’s Minimum Dues report. Did the unit receive a wage increase or decrease in this time period?",
             "StartingHourlyMissing": "Hourly increases or decreases also require the hourly wage rate before the increase so that the percentage increase can be recorded. Please enter the average hourly wage before the increase for this unit. Your best estimate is fine.",
-            "StartingAnnualMissing": "Lump sum increases / bonuses also require the annual salary so that the percentage increase can be recorded. Please enter the annual salary before the increase for this unit. Your best estimate is fine."
+            "StartingAnnualMissing": "Lump sum increases / bonuses also require the annual salary so that the percentage increase can be recorded. Please enter the annual salary before the increase for this unit. Your best estimate is fine.",
+            "ContractRequired": "We need the CBA, arbitration award or wage ordinance for this unit to comply with the AFSCME constitution and auditor’s review. Please attach it to this form using the button above or email to mmurphy@afscme.org as soon as possible."
         },
 
         "Footer": {

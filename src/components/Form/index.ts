@@ -43,6 +43,7 @@ export class UnitForm extends LitElement {
     form_data!: FormPayload;
 
     protected render() {
+        console.log(this.form_data)
         return html`
             <status-bar></status-bar>
             <form>
@@ -56,7 +57,7 @@ export class UnitForm extends LitElement {
                                  phone=${this.form_data?.contact?.phone}
                                  @get-reporter-fields=${this._setReporterFieldData}>
                 </reporter-fields>
-                <unit-status memberCount=${this.form_data?.number_of_members}
+                <unit-status number_of_members=${this.form_data?.number_of_members}
                              contractStartDate=${this.form_data?.agreement_eff_date}
                              contractEndDate=${this.form_data?.agreement_exp_date}
                              .cba_file=${this.form_data?.cba_file}
