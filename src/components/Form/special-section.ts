@@ -50,6 +50,7 @@ export class SpecialSection extends LitElement {
 
 
     protected render() {
+        console.log(this._specialWageEventArray)
         let {Header, QuestionSpecialRaise} = FieldLabels.SpecialIncreases;
         return html`
             <form-header title=${Header}></form-header>
@@ -72,6 +73,11 @@ export class SpecialSection extends LitElement {
 
     _setSpecialRaise = (e: CustomEvent) => {
         this._specialRaise = e.detail === 'Yes' ? true : false;
+
+        if(this._specialRaise === false){
+            this._specialRaiseArray = [];
+            this._specialWageEventArray = [];
+        }
     }
 
     _addSpecialRaise = () => {
