@@ -80,7 +80,6 @@ export class UnitStatus extends LitElement {
 
 
     protected render() {
-        console.log(this.number_of_members)
         let {Header, QuestionActive, MemberCount, ContractDates, CBAUpload, QuestionWages, QuestionBargaining} = FieldLabels.UnitStatus;
         return html`
             <form-header title=${Header} warning=${this.section_notes}></form-header>

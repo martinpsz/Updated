@@ -37,19 +37,12 @@ export class StatusBar extends LitElement {
     `
 
     @property()
-    currReportNumber!: number;
-
-    @property()
-    totalReports!: number;
-
-    @property()
     statusMessage!: string;
 
 
     protected render() {
         return html`
             <div>
-                <span>Report: ${this.currReportNumber} of ${this.totalReports}</span>
                 <p>${this.statusMessage}</p>
                 <button-comp buttonText="Upload Saved Reports"
                              icon="uil:folder-upload">

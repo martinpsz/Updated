@@ -59,6 +59,12 @@ export class UnitElement extends LitElement {
     @property({type: 'string'})
     unit_name!: string;
 
+    @property({type: 'number'})
+    unitIndex!: number;
+
+    @property({type: 'number'})
+    unitLength!: number;
+
 
     protected render() {
         return html`
@@ -68,6 +74,9 @@ export class UnitElement extends LitElement {
                 ${this.council ? html`<span>C: ${this.council}</span>` : nothing}
                 ${this.number_of_members ? html`<span>Members: ${this.number_of_members}</span>` : nothing}
                 <h1 title=${this.unit_name}>${this.unit_name}</h1>
+                <div class="status-bar">
+                    <span>Report: ${this.unitIndex} of ${this.unitLength}</span>
+                </div>
             </div>
             
         `

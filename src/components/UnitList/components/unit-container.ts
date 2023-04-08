@@ -113,7 +113,9 @@ export class UnitContainer extends LitElement {
                         number_of_members=${unit.number_of_members}
                         unit_name=${unit.unit_name}
                         @click=${this._selectUnit}
-                        class=${this._unitSelection === unit?.unit_id.toString() ? 'selected' : ''}>
+                        class=${this._unitSelection === unit?.unit_id.toString() ? 'selected' : ''}
+                        unitIndex=${this._flattenedUnits.findIndex(elem => elem.unit_id === unit.unit_id) + 1}
+                        unitLength=${this._flattenedUnits.length}>
                     </unit-element>
                 `
             })
@@ -197,6 +199,7 @@ export class UnitContainer extends LitElement {
 
             return unit?.unit_id?.toString() === this._unitSelection
         });
+
 
         this.dispatchEvent(new CustomEvent('update-unit-selection', {
             detail: {
