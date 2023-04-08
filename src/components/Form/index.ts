@@ -1,4 +1,4 @@
-import { LitElement, html, css, PropertyValueMap } from "lit";
+import { LitElement, html, css} from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 import '../Form/form-header';
 import '../Form/employer-fields';
@@ -42,8 +42,8 @@ export class UnitForm extends LitElement {
     @property()
     form_data!: FormPayload;
 
-
     protected render() {
+        console.log(this.form_data)
         return html`
             <status-bar></status-bar>
             <form>
@@ -61,11 +61,16 @@ export class UnitForm extends LitElement {
                              contractStartDate=${this.form_data?.agreement_eff_date}
                              contractEndDate=${this.form_data?.agreement_exp_date}
                              .cba_file=${this.form_data?.cba_file}
+                             @get-inactive-status=${this._setInactiveStatus}
+                             @get-wage-status=${this._setWageStatus}
                              @get-unit-status=${this._setUnitStatusData}
+                             @get-bargaining-status=${this._setBargainingStatus}
                              .RegularWageEvent=${this.form_data?.regular_wage_events[0]}
                              .SpecialWageEvent=${this.form_data?.special_wage_events[0]}
-                             comment=${this.form_data?.comment}
-                             
+                             @get-feedback=${this._setUserFeedback}
+                             @get-regular-event-array=${this._setRegularWageData}
+                             @get-special-event-array=${this._setSpecialWageData}
+                             @comment-toggle=${this._setCommentToggle}>
                 </unit-status>
             </form>
         `
@@ -86,24 +91,43 @@ export class UnitForm extends LitElement {
         this.form_data = {...this.form_data, number_of_members: memberCount, agreement_eff_date: contractStartDate, agreement_exp_date: contractEndDate, cba_file: cba_file}
     }
 
-    
+    _setRegularWageData = (e: CustomEvent) => {
+        this.form_data = {...this.form_data, regular_wage_events: e.detail}
+    }
 
-    /*_setInactiveStatus = (e: CustomEvent) => {
-        this.unit_data = {...this.unit_data, inactive_status: e.detail}
+    _setSpecialWageData = (e: CustomEvent) => {
+        this.form_data = {...this.form_data, special_wage_events: e.detail}
+    }
+
+    _setInactiveStatus = (e: CustomEvent) => {
+        if(e.detail === 'Yes'){
+            this.form_data = {...this.form_data, number_of_members: null, agreement_eff_date: null, agreement_exp_date: null, cba_file: null, regular_wage_events: [], special_wage_events: [], bargaining_status: null, wage_status: null, filing_status: 'READY FOR SUBMISSION', inactive_status: e.detail}
+        } else {
+            this.form_data = {...this.form_data, inactive_status: e.detail}
+        }
     }
 
     _setWageStatus = (e: CustomEvent) => {
-        this.unit_data = {...this.unit_data, wage_status: e.detail}
+        if(e.detail === 'Yes'){
+            this.form_data = {...this.form_data, wage_status: e.detail, bargaining_status: null}
+        } else {
+            this.form_data = {...this.form_data, wage_status: e.detail, bargaining_status: 'No'}
+        }
     }
 
     _setBargainingStatus = (e: CustomEvent) => {
-        this.unit_data = {...this.unit_data, bargaining_status: e.detail}
+        this.form_data = {...this.form_data, bargaining_status: e.detail, regular_wage_events: [], special_wage_events: []}
     }
 
-
     _setUserFeedback = (e: CustomEvent) => {
-        this.unit_data = {...this.unit_data, comment: e.detail}
-    }*/
+        this.form_data = {...this.form_data, comment: e.detail}
+    }
+
+    _setCommentToggle = (e: CustomEvent) => {
+        if (e.detail === 'No'){
+            this.form_data = {...this.form_data, comment: null}
+        }
+    }
 
 
     

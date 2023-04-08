@@ -50,7 +50,6 @@ export class SpecialSection extends LitElement {
 
 
     protected render() {
-        console.log('Special raise events:', this._specialWageEventArray)
         let {Header, QuestionSpecialRaise} = FieldLabels.SpecialIncreases;
         return html`
             <form-header title=${Header}></form-header>
@@ -58,7 +57,7 @@ export class SpecialSection extends LitElement {
                 <radio-prompt prompt=${QuestionSpecialRaise}
                               @get-toggle-selection=${this._setSpecialRaise}>
                 </radio-prompt>
-                ${this._specialRaise ? html`<special-event id="first" key='0' .SpecialWageEvent=${this.SpecialWageEvent} @get-special-event-data=${this._setSpecialWageEvent}></special-event>
+                ${this._specialRaise ? html`<special-event id="first" key='0' .SpecialWageEvent=${this.SpecialWageEvent} @get-special-event-data=${(e: CustomEvent) => this._setSpecialWageEvent(e, 'ADD-RAISE')}></special-event>
                 ${this._specialRaiseArray.map(item => item)}
                 <button-comp buttonText=${FieldLabels.RaiseFields.AddSpecialRaise} 
                 primary
@@ -81,28 +80,51 @@ export class SpecialSection extends LitElement {
         this._specialWageEventArray.push({key: key.toString(), effective_date: '', wage_event_type: '% increase', wage_event_value: null, starting_value: null,
         num_affected: null, description: '', supporting_doc: new File([], '')})
 
-        const newSpecialRaise = html`<special-event id=${key} key=${key} .SpecialWageEvent=${this._specialWageEventArray} @get-special-event-data=${this._setSpecialWageEvent}></special-event>`
+        const newSpecialRaise = html`<special-event id=${key} key=${key} .SpecialWageEvent=${this._specialWageEventArray} @get-special-event-data=${(e: CustomEvent) => this._setSpecialWageEvent(e, 'ADD-RAISE')} @remove-raise=${(e: CustomEvent) => this._setSpecialWageEvent(e, 'REMOVE-RAISE')}></special-event>`
 
         this._specialRaiseArray = [...this._specialRaiseArray, newSpecialRaise]
     }
 
+    _setSpecialWageEvent = (e: CustomEvent, typeOfEvent: 'ADD-RAISE' | 'REMOVE-RAISE') => {
+        if (typeOfEvent === 'ADD-RAISE'){
+            const addToRegularWageArray = (currWageArray: Array<WageEventInterface>, newWageEvent: WageEventInterface) => {
 
-    _setSpecialWageEvent = (e: CustomEvent) => {
-        const updateSpecialWageArray = (currWageArray: Array<WageEventInterface>, newWageEvent: WageEventInterface) => {
+                const indexMatch = currWageArray.findIndex(wageEvent => wageEvent.key === newWageEvent.key)
+    
+                if(indexMatch !== -1){
+                    currWageArray[indexMatch] = newWageEvent;
+                } else {
+                    currWageArray.push(newWageEvent)
+                }
+                
+                return currWageArray;
+            }
+    
+            this._specialWageEventArray = addToRegularWageArray(this._initialSpecialWageEventArray, e.detail)
+        }
 
-            const indexMatch = currWageArray.findIndex((wageEvent) => wageEvent.key === newWageEvent.key)
-
-            if(indexMatch !== -1){
-                currWageArray[indexMatch] = newWageEvent
-            }else{
-                currWageArray.push(newWageEvent)
+        if (typeOfEvent === 'REMOVE-RAISE'){
+            const removeFromRegularWageArray = (currWageArray: Array<WageEventInterface>, key: string) => {
+                const indexMatch = currWageArray.findIndex(wageEvent => wageEvent.key === key)
+    
+                if(indexMatch !== -1){
+                    currWageArray.splice(indexMatch, 1)
+                }
+    
+                return currWageArray;
             }
 
-            return currWageArray
+            this._specialWageEventArray = removeFromRegularWageArray(this._initialSpecialWageEventArray, e.detail)
+        }
+
+        this.dispatchEvent(new CustomEvent('get-special-event-array', {
+            detail: this._specialWageEventArray,
+            bubbles: true,
+            composed: true
+        }))
+        
     }
 
-        this._specialWageEventArray = updateSpecialWageArray(this._initialSpecialWageEventArray, e.detail)
-    }
 }
 
 declare global {

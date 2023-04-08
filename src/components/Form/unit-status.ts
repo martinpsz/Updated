@@ -26,7 +26,7 @@ export class UnitStatus extends LitElement {
     `
 
     @state()
-    _activeStatus!: {question: string, toggleSelection : 'Yes' | 'No'};
+    _inactiveStatus!: {question: string, toggleSelection : 'Yes' | 'No'};
 
     @state()
     _wagesStatus!: {question: string, toggleSelection : 'Yes' | 'No'};
@@ -58,7 +58,7 @@ export class UnitStatus extends LitElement {
 
     constructor(){
         super();
-        this._activeStatus = {
+        this._inactiveStatus = {
             question: '',
             toggleSelection: 'No'
         }
@@ -85,7 +85,7 @@ export class UnitStatus extends LitElement {
                               initialChecked="No"
                               @get-prompt-toggle-selection=${(e: CustomEvent) => this._setActiveStatus(e, QuestionActive)}>
                 </radio-prompt>
-                ${this._activeStatus.toggleSelection === 'No' ? html`
+                ${this._inactiveStatus.toggleSelection === 'No' ? html`
                     <div class="unit-status-meta">
                         <input-field label=${MemberCount} 
                                      type="number"
@@ -130,7 +130,7 @@ export class UnitStatus extends LitElement {
     }
 
     _setActiveStatus = (e: CustomEvent, question: string) =>{
-        this._activeStatus = {
+        this._inactiveStatus = {
             question: question,
             toggleSelection: e.detail.toggleSelection
         }

@@ -51,19 +51,23 @@ export class TextArea extends LitElement {
                           @get-toggle-selection=${this._setToggleSelection}>
             </radio-prompt>
             ${this._comments === 'Yes' ? html`<textarea placeholder="Enter your comments here" @input=${debounce(this._getFeedback)}></textarea>` : nothing}
-            <button-comp  buttonText="Save This Report" icon="material-symbols:attach-file-add-rounded"></button-comp>
+            <button-comp buttonText="Save This Report" icon="material-symbols:attach-file-add-rounded"></button-comp>
         `
     }
 
     _setToggleSelection = (e: CustomEvent) => {
         this._comments = e.detail;
+
+        this.dispatchEvent(new CustomEvent('comment-toggle', {
+            detail: this._comments,
+            bubbles: true,
+            composed: true
+        }))
     }
 
     _getFeedback = () => {
-        const feedback = this.renderRoot.querySelector('textarea')?.value
-
         this.dispatchEvent(new CustomEvent('get-feedback', {
-            detail: feedback,
+            detail: this.renderRoot.querySelector('textarea')?.value,
             bubbles: true,
             composed: true
         }))

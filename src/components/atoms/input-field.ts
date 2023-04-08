@@ -136,6 +136,8 @@ export class InputField extends LitElement {
     _getDebouncedInput = () => {
         const inputElement = this.renderRoot.querySelector('.input-container input') as HTMLInputElement;
         const inputValue = inputElement.value;
+
+
         this.dispatchEvent(new CustomEvent('get-debounced-value', {
             detail: {
                 value: inputValue,
@@ -159,7 +161,11 @@ export class InputField extends LitElement {
         }))
     }
 
+
+
 }
+
+
 
 declare global {
     interface HTMLElementTagNameMap {

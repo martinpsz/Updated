@@ -4,7 +4,7 @@ import '../Form/form-header';
 import './wage-event';
 import './special-section'
 import {FieldLabels} from '../../config/settings.json';
-import {WageEventInterface} from '../../interfaces/interface.js';
+import {WageEventInterface, WageEventList} from '../../interfaces/interface.js';
 
 
 
@@ -53,11 +53,10 @@ export class WageSection extends LitElement {
     
 
     protected render() {
-        console.log('Regular raise events:', this._regularWageEventArray)
         return html`
             <form-header title=${FieldLabels.AcrossTheBoard.Header}></form-header>
 
-            <wage-event id="first" key='0' .RegularWageEvent=${this.RegularWageEvent} @get-wage-event-data=${this._setRegularWageEvent}></wage-event>
+            <wage-event id="first" key='0' .RegularWageEvent=${this.RegularWageEvent} @get-wage-event-data=${(e:CustomEvent) => this._setRegularWageEvent(e, 'ADD-RAISE')}></wage-event>
 
             ${this._regularRaiseArray.map(item => item)}
             <button-comp buttonText=${FieldLabels.RaiseFields.AddRegularRaise} 
@@ -74,30 +73,53 @@ export class WageSection extends LitElement {
 
         this._regularWageEventArray.push({key: key.toString(), effective_date: '', wage_event_type: '% increase', wage_event_value: null, starting_value: null})
 
-        const newWageEvent = html`<wage-event key=${key} .RegularWageEvent=${this._regularWageEventArray} @get-wage-event-data=${this._setRegularWageEvent}></wage-event>`;
+        const newWageEvent = html`<wage-event key=${key} .RegularWageEvent=${this._regularWageEventArray} @get-wage-event-data=${(e: CustomEvent) => this._setRegularWageEvent(e, 'ADD-RAISE')} @remove-raise=${(e: CustomEvent) => this._setRegularWageEvent(e, 'REMOVE-RAISE')}></wage-event>`;
 
 
         this._regularRaiseArray = [...this._regularRaiseArray, newWageEvent];
     }
 
     
-    _setRegularWageEvent = (e: CustomEvent) => {
-        const updateRegularWageArray = (currWageArray: Array<WageEventInterface>, newWageEvent: WageEventInterface) => {
+    _setRegularWageEvent = (e: CustomEvent, typeOfEvent: 'ADD-RAISE' | 'REMOVE-RAISE') => {
+        if (typeOfEvent === 'ADD-RAISE'){
+            const addToRegularWageArray = (currWageArray: Array<WageEventInterface>, newWageEvent: WageEventInterface) => {
 
-            const indexMatch = currWageArray.findIndex(wageEvent => wageEvent.key === newWageEvent.key)
-
-            if(indexMatch !== -1){
-                currWageArray[indexMatch] = newWageEvent;
-            } else {
-                currWageArray.push(newWageEvent)
+                const indexMatch = currWageArray.findIndex(wageEvent => wageEvent.key === newWageEvent.key)
+    
+                if(indexMatch !== -1){
+                    currWageArray[indexMatch] = newWageEvent;
+                } else {
+                    currWageArray.push(newWageEvent)
+                }
+                
+                return currWageArray;
             }
-            
-            return currWageArray;
+    
+            this._regularWageEventArray = addToRegularWageArray(this._initialRegularWageEventArray, e.detail)
         }
 
-        this._regularWageEventArray = updateRegularWageArray(this._initialRegularWageEventArray, e.detail)
+        if (typeOfEvent === 'REMOVE-RAISE'){
+            const removeFromRegularWageArray = (currWageArray: Array<WageEventInterface>, key: string) => {
+                const indexMatch = currWageArray.findIndex(wageEvent => wageEvent.key === key)
+    
+                if(indexMatch !== -1){
+                    currWageArray.splice(indexMatch, 1)
+                }
+    
+                return currWageArray;
+            }
+
+            this._regularWageEventArray = removeFromRegularWageArray(this._initialRegularWageEventArray, e.detail)
+        }
+
+        this.dispatchEvent(new CustomEvent('get-regular-event-array', {
+            detail: this._regularWageEventArray,
+            bubbles: true,
+            composed: true
+        }))
         
     }
+
 
     
     

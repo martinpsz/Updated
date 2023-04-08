@@ -53,8 +53,8 @@ export interface FormPayload {
     number_of_members: number | null;
     agreement_eff_date: string | null;
     agreement_exp_date: string | null;
-    cba_file: File;
-    wage_status: 'Yes' | 'No';
+    cba_file: File | null;
+    wage_status: 'Yes' | 'No' | null;
     bargaining_status: 'Yes' | 'No' | null;
 
     regular_wage_events: WageEventList;
@@ -62,7 +62,7 @@ export interface FormPayload {
 
     comment: string | null;
 
-    filing_status: 'NEEDS REVIEW' | 'SUBMITTED' | 'APPROVED';
+    filing_status: 'NEEDS REVIEW' | 'READY FOR SUBMISSION' | 'SUBMITTED' | 'APPROVED';
     notes: string | null; 
 }
 

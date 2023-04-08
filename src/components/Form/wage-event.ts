@@ -7,7 +7,7 @@ import '../atoms/button-comp';
 import {FieldLabels} from '../../config/settings.json';
 import {WageEventInterface} from '../../interfaces/interface.js';
 import {wageValueAdjusted} from '../Form/utilities/wageValueAdjusted.js';
-
+import { debounce } from '../../utilities/debounce.js';
 
 @customElement('wage-event')
 export class WageEvent extends LitElement {
@@ -163,7 +163,7 @@ export class WageEvent extends LitElement {
                                     @get-debounced-value=${(e:CustomEvent) => this._update_wage_event(e, 'wage_event_value')}
                                      >
                         </input-field>
-                        <span class=${this.wage_event_type === 'hourly decrease' && 'red'} @click=${this._gitremoveWageEvent}>$</span>
+                        <span class=${this.wage_event_type === 'hourly decrease' && 'red'}>$</span>
                     </div>
                     <div class="field-with-span" id="starting-wage">
                         <input-field label=${this.wage_event_type === 'lump sum/bonus' ? 'Starting Annual' : 'Starting Hourly'} 
@@ -177,6 +177,16 @@ export class WageEvent extends LitElement {
                 <span class='remove' @click=${this._removeRaiseFromWageArray}>&#x2715;</span>
             </div>
         `
+    }
+
+    _removeRaiseFromWageArray = () => {
+        this.remove()
+        
+        this.dispatchEvent(new CustomEvent('remove-raise', {
+            detail: this.key,
+            bubbles: true,
+            composed: true
+        }));
     }
 
     _update_wage_event = (e: CustomEvent, event_type: string) => {
@@ -237,9 +247,7 @@ export class WageEvent extends LitElement {
 
    
 
-    _removeRaiseFromWageArray = () =>{
-        //console.log(this)
-    }
+    
 
    
 

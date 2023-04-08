@@ -9,7 +9,6 @@ export class RadioSlider extends LitElement {
             position: relative;
             width: 80px;
             height: 30px;
-            //border: 1px solid rgba(var(--white), 1);
         }
         
         .toggle-switch input[type="checkbox"] {
