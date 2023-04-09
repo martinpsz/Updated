@@ -33,10 +33,6 @@ export class UnitForm extends LitElement {
             background: rgb(var(--green));
         }
 
-        form-header{
-           // width: 100%;
-        }
-
     `
 
     @property()

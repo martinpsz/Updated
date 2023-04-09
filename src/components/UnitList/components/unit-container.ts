@@ -1,8 +1,10 @@
 import { LitElement, html, css, nothing, TemplateResult} from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 import {processedData} from "../../../entry/utilities/preprocessing.js";
-import '../components/unit-element.js'
+import '../components/unit-element'
 import { ProcessedData, UnitList, Unit } from "../../../interfaces/interface.js";
+import '../components/unit-menu'
+import { UnitList } from "../index.js";
  
 
 @customElement("unit-container")
@@ -11,21 +13,32 @@ export class UnitContainer extends LitElement {
         .unit-list-container{
             display: none;
         }
+
         @media (min-width: 768px){
             .unit-list-container{
                 display: block;
                 height: 40vh;
-                overflow-y: scroll;
-                //background: rgb(var(--black));
+                overflow-y: auto;
                 padding: 0.25em;
-                //width: 50%;
+                border-bottom: 1px solid rgb(var(--white));
             }
+
+            .unit-list-container::-webkit-scrollbar{
+                width: 0.5em;
+            }
+    
+            .unit-list-container::-webkit-scrollbar-track{
+                background: rgb(var(--white), 0.85);
+            }
+    
+            .unit-list-container::-webkit-scrollbar-thumb{
+                background: rgb(var(--green));
+            }  
         }
 
         @media (min-width: 1024px){
             .unit-list-container{
-                height: 66vh;
-                //width: 30%;
+                height: 52.5vh;
             }
         }
 
@@ -41,6 +54,12 @@ export class UnitContainer extends LitElement {
             margin-bottom: 0.25em;
             position: sticky;
             top: -0.25em;
+        }
+
+        .master-contract-meta > div{
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
         }
 
         .show .master-contract-meta{
@@ -78,11 +97,14 @@ export class UnitContainer extends LitElement {
             outline: 1px solid rgb(var(--white));
             padding-bottom: 0.25em;
             margin-bottom: 0.5em;
-
         }
 
         .show .master-contract-units{
             display: block;
+        }
+
+        .show #icon{
+            transform: rotate(180deg);
         }
         
     `
@@ -92,6 +114,9 @@ export class UnitContainer extends LitElement {
 
     @state()
     _flattenedUnits!: UnitList;
+
+    @property()
+    searchTerm: string = '';
     
     constructor(){
         super()
@@ -103,7 +128,10 @@ export class UnitContainer extends LitElement {
         let result: string | TemplateResult = '';
 
         for(let group in unitData){
-            const unitList = unitData[group].map((unit: any) => {
+            const unitList = unitData[group].filter((unit: Unit) => {
+                if(this.searchTerm === '') return true;
+                return unit?.unit_name?.toLowerCase().startsWith(this.searchTerm.toLowerCase())
+            }).map((unit: Unit) => {
                 return html`
                     <unit-element 
                         unit_id=${unit.unit_id}
@@ -113,21 +141,25 @@ export class UnitContainer extends LitElement {
                         number_of_members=${unit.number_of_members}
                         unit_name=${unit.unit_name}
                         @click=${this._selectUnit}
-                        class=${this._unitSelection === unit?.unit_id.toString() ? 'selected' : ''}
+                        class=${this._unitSelection === unit?.unit_id?.toString() ? 'selected' : ''}
                         unitIndex=${this._flattenedUnits.findIndex(elem => elem.unit_id === unit.unit_id) + 1}
                         unitLength=${this._flattenedUnits.length}>
                     </unit-element>
                 `
             })
 
-           if (group !== 'unit_contracts') {
+
+           if (group !== 'unit_contracts' && unitList.length > 0) {
                 result = html`
                     ${result}
                     <div class="master-contract" @click=${this._toggleMasterContract}>
                         <div class="master-contract-meta">
-                            <span>Master Agreement</span>
-                            <span>${unitData[group].length} Units</span>
-                            <h1 title=${group}>${group}</h1>
+                            <div>
+                                <span id="master-label">Master Agreement</span>
+                                <span id="master-count">${unitList.length} Units</span>
+                                <iconify-icon id="icon" icon="mdi:chevron-double-up" style="color: white;" width="32" height="32"></iconify-icon>
+                            </div>
+                            <h1 id="master-name" title=${group}>${group}</h1>
                         </div>
                         <div class="master-contract-units">
                             ${unitList}
@@ -138,9 +170,10 @@ export class UnitContainer extends LitElement {
                 result = html`${result} ${unitList}`;
             }
         }
-
         return result
     }
+
+
 
 
     protected render() {
