@@ -85,30 +85,8 @@ export class MinimumDues extends LitElement {
             bargaining_status: null,
             cba_file : new File([], ''),
             comment: '',
-            regular_wage_events: [
-                {
-                    key: '0',
-                    effective_date: '' as WageEventInterface['effective_date'],
-                    wage_event_type: '% increase' as WageEventInterface['wage_event_type'], 
-                    wage_event_value: null as WageEventInterface['wage_event_value'],
-                    starting_value: null as WageEventInterface['starting_value'],
-                    
-                }
-            ],
-
-            special_wage_events: [
-                {
-                    key: '0',
-                    effective_date: '' as WageEventInterface['effective_date'],
-                    wage_event_type: '% increase' as WageEventInterface['wage_event_type'],
-                    wage_event_value: null as WageEventInterface['wage_event_value'],
-                    starting_value: null as WageEventInterface['starting_value'],
-                    num_affected: null as WageEventInterface['num_affected'],
-                    description: null as WageEventInterface['description'],
-                    supporting_doc: new File([], '') as WageEventInterface['supporting_doc'],
-                }
-
-            ],
+            regular_wage_events: [],
+            special_wage_events: [],
             filing_status: 'Needs Review' as FormPayload['filing_status'],
             notes: ''
         }
