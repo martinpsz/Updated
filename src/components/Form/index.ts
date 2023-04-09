@@ -60,8 +60,8 @@ export class UnitForm extends LitElement {
                              @get-wage-status=${this._setWageStatus}
                              @get-unit-status=${this._setUnitStatusData}
                              @get-bargaining-status=${this._setBargainingStatus}
-                             .RegularWageEvent=${this.form_data?.regular_wage_events[0]}
-                             .SpecialWageEvent=${this.form_data?.special_wage_events[0]}
+                             .RegularWageEvent=${this.form_data?.regular_wage_events}
+                             .SpecialWageEvent=${this.form_data?.special_wage_events}
                              @get-feedback=${this._setUserFeedback}
                              @get-regular-event-array=${this._setRegularWageData}
                              @get-special-event-array=${this._setSpecialWageData}

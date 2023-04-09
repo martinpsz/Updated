@@ -4,7 +4,7 @@ import {processedData} from "../../../entry/utilities/preprocessing.js";
 import '../components/unit-element'
 import { ProcessedData, UnitList, Unit } from "../../../interfaces/interface.js";
 import '../components/unit-menu'
-import { UnitList } from "../index.js";
+
  
 
 @customElement("unit-container")
