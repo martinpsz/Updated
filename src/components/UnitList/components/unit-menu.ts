@@ -36,6 +36,36 @@ export class UnitMenu extends LitElement {
         input:focus{
             outline: transparent;
         }
+
+        .filter{
+            margin-top: 1em;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .filter span{
+            font-size: 0.8em;
+            text-transform: uppercase;
+        }
+
+        .filter-option{
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .filter-option label{
+            font-size: 0.9em;
+            line-height: 1.1em;
+        }
+
+        input[type=radio]{
+            height: 1em;
+            //outline: 1px solid red;
+        }
+
+        
     `
 
     protected render() {
@@ -46,7 +76,20 @@ export class UnitMenu extends LitElement {
                 <input type="text" id="search-input" placeholder="Search by unit or reporter name" @input=${debounce(this._getSearchTerm)}>
             </div>
             <div class=filter>
-            
+                <span>Filter by:</span>
+                <div class="filter-option">
+                    <input type="radio" name="filter" id="all" value="all" checked>
+                    <label for="all">All</label>
+                
+                    <input type="radio" name="filter" id="review" value="review">
+                    <label for="review">Review Needed</label>
+              
+                    <input type="radio" name="filter" id="ready" value="ready">
+                    <label for="ready">Ready for Submission</label>
+             
+                    <input type="radio" name="filter" id="submitted" value="submitted">
+                    <label for="submitted">Submitted</label>
+                </div>
             </div>
            </div>
         `
