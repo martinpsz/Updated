@@ -62,7 +62,7 @@ export interface FormPayload {
 
     comment: string | null;
 
-    filing_status: 'NEEDS REVIEW' | 'READY FOR SUBMISSION' | 'SUBMITTED' | 'APPROVED';
+    filing_status: 'REVIEW NEEDED' | 'READY FOR SUBMISSION' | 'SUBMITTED' | 'APPROVED';
     notes: string | null; 
 }
 

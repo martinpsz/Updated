@@ -45,10 +45,19 @@ export class StatusBar extends LitElement {
             <div>
                 <p>${this.statusMessage}</p>
                 <button-comp buttonText="Upload Saved Reports"
-                             icon="uil:folder-upload">
+                             icon="uil:folder-upload"
+                             @click=${this._handleClick}>
                 </button-comp>
             </div>
         `
+    }
+
+    _handleClick = () => {
+        this.dispatchEvent(new CustomEvent('initiate-form-upload', {
+            detail: 'OpenModal',
+            bubbles: true,
+            composed: true
+        }))
     }
 }
 

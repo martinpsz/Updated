@@ -22,7 +22,6 @@ export class UnitList extends LitElement {
     filterBy: string = 'all';
     
     protected render() {
-        console.log('Search on the following conditions', this.searchTerm, this.filterBy)
         return html`
             <unit-container 
                 .unit_data=${processedData}

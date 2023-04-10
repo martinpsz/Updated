@@ -1,4 +1,4 @@
-import { LitElement, html, css} from "lit";
+import { LitElement, html, css, nothing} from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 import '../Form/form-header';
 import '../Form/employer-fields';
@@ -33,15 +33,60 @@ export class UnitForm extends LitElement {
             background: rgb(var(--green));
         }
 
+
+        #modal{
+            height: 100%;
+            width: 100%;
+            background-color: rgba(var(--black), 0.75);
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1;
+        }
+
+        #modal-content{
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgb(var(--white));
+            padding: 2em 1em;
+            border-radius: 0.25em;
+            font-family: var(--font-family);
+            color: rgb(var(--black));
+        }
+
+        #modal-buttons{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            column-gap: 1em;
+        }
+
     `
 
     @property()
     form_data!: FormPayload;
 
+    @state()
+    modal : boolean = false;
+
     protected render() {
+        console.log(this.modal)
         return html`
-            <status-bar></status-bar>
+            <status-bar @initiate-form-upload=${this._openModalForSubmission}></status-bar>
             <form>
+                ${this.modal ? html`
+                    <div id="modal">
+                        <div id="modal-content">
+                            <p>Are you sure you want to submit the complete Minimum Dues report for ${this.form_data.unit_name}?</p>
+                            <div id="modal-buttons">
+                                <button-comp buttonText="Yes" primary icon="bi:hand-thumbs-up" @click=${this._handleSubmission}></button-comp>
+                                <button-comp buttonText="No" icon="bi:hand-thumbs-down" @click=${this._closeModalForSubmission}></button-comp>
+                            </div>
+                        </div>
+                    </div>
+                ` : nothing}
                 <employer-fields employer=${this.form_data?.unit_name}
                                  local=${this.form_data?.local}
                                  subunit=${this.form_data?.subunit}
@@ -69,6 +114,16 @@ export class UnitForm extends LitElement {
                 </unit-status>
             </form>
         `
+    }
+
+    _openModalForSubmission = (e: CustomEvent) => {
+        if(e.detail === 'OpenModal'){
+            this.modal = true;
+        };
+    }
+
+    _closeModalForSubmission = () => {
+        this.modal = false;
     }
 
     _setEmployerFieldData = (e: CustomEvent) => {
