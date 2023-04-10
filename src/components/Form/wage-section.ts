@@ -1,4 +1,4 @@
-import { LitElement, html, css, nothing, TemplateResult} from "lit";
+import { LitElement, html, css, nothing, TemplateResult, PropertyValueMap} from "lit";
 import { customElement, state, property} from "lit/decorators.js";
 import '../Form/form-header';
 import './wage-event';
@@ -29,14 +29,14 @@ export class WageSection extends LitElement {
     
     `
 
-    @state()
-    _regularRaiseArray: TemplateResult[] = [];  // Initializes an array of HTML templates for the wage event
+    //@state()
+    //_regularRaiseArray: TemplateResult[] = [];  // Initializes an array of HTML templates for the wage event
 
-    @state()
-    _initialRegularWageEventArray: Array<WageEventInterface> = []; //Provides a starting proint for collect wage events.
+    //@state()
+    //_initialRegularWageEventArray: Array<WageEventInterface> = []; //Provides a starting proint for collect wage events.
 
-    @state()
-    _regularWageEventArray: Array<WageEventInterface> = []; //New wage events that are added to the initial array.
+    //@state()
+    //_regularWageEventArray: Array<WageEventInterface> = []; //New wage events that are added to the initial array.
 
     @property()
     RegularWageEvent!: WageEventInterface;
@@ -47,21 +47,35 @@ export class WageSection extends LitElement {
     @property()
     section_notes!: string;
 
-    constructor(){
-        super()
-
-        this._initialRegularWageEventArray = [{key: '0', effective_date: '', wage_event_type: '% increase', wage_event_value: null, starting_value: null}]
-    }
+    @property()
+    regular_wage_events: Array<WageEventInterface> = [{key: '0', effective_date: '', wage_event_type: '% increase', wage_event_value: null, starting_value: null} as WageEventInterface] ;
 
     
 
     protected render() {
+        console.log(this.regular_wage_events)
         return html`
             <form-header title=${FieldLabels.AcrossTheBoard.Header} warning=${this.section_notes}></form-header>
 
-            <wage-event id="first" key='0' .RegularWageEvent=${this.RegularWageEvent} @get-wage-event-data=${(e:CustomEvent) => this._setRegularWageEvent(e, 'ADD-RAISE')}></wage-event>
+            
 
-            ${this._regularRaiseArray.map(item => item)}
+            ${this.regular_wage_events.map((wageEvent: WageEventInterface) => {
+                return wageEvent.key === '0' ? 
+                html`
+                    <wage-event key=${'0'}
+                        id='first'
+                        @get-wage-event-data=${(e: CustomEvent) => this._setRegularWageEvent(e, 'ADD-RAISE')}
+                    </wage-event>
+                `: html`
+                    <wage-event key=${wageEvent.key.toString()}
+                        @get-wage-event-data=${(e: CustomEvent) => this._setRegularWageEvent(e, 'ADD-RAISE')}
+                        @remove-raise=${(e: CustomEvent) => this._setRegularWageEvent(e, 'REMOVE-RAISE')}>
+                    </wage-event>
+                `
+            }
+                
+                
+            )}
             <button-comp buttonText=${FieldLabels.RaiseFields.AddRegularRaise} 
             primary
             @click=${this._addRegularRaise}
@@ -72,15 +86,11 @@ export class WageSection extends LitElement {
     }
 
     _addRegularRaise = () => {
-        const key = this._regularRaiseArray.length + 1;
-
-        this._regularWageEventArray.push({key: key.toString(), effective_date: '', wage_event_type: '% increase', wage_event_value: null, starting_value: null})
-
-        const newWageEvent = html`<wage-event key=${key} .RegularWageEvent=${this._regularWageEventArray} @get-wage-event-data=${(e: CustomEvent) => this._setRegularWageEvent(e, 'ADD-RAISE')} @remove-raise=${(e: CustomEvent) => this._setRegularWageEvent(e, 'REMOVE-RAISE')}></wage-event>`;
-
-
-        this._regularRaiseArray = [...this._regularRaiseArray, newWageEvent];
+        console.log(this.renderRoot.querySelector('wage-event:last-of-type')?.getAttribute('key'))
+        const key = this.regular_wage_events.length;
+        this.regular_wage_events = [...this.regular_wage_events, {key: key.toString(), effective_date: '', wage_event_type: '% increase', wage_event_value: null, starting_value: null}]
     }
+
 
     
     _setRegularWageEvent = (e: CustomEvent, typeOfEvent: 'ADD-RAISE' | 'REMOVE-RAISE') => {
@@ -98,32 +108,38 @@ export class WageSection extends LitElement {
                 return currWageArray;
             }
     
-            this._regularWageEventArray = addToRegularWageArray(this._initialRegularWageEventArray, e.detail)
+            this.regular_wage_events = addToRegularWageArray(this.regular_wage_events, e.detail)
         }
 
         if (typeOfEvent === 'REMOVE-RAISE'){
             const removeFromRegularWageArray = (currWageArray: Array<WageEventInterface>, key: string) => {
-                const indexMatch = currWageArray.findIndex(wageEvent => wageEvent.key === key)
-    
+                const indexMatch = currWageArray.findIndex(wageEvent => {
+                    console.log(wageEvent.key, key)
+                    return wageEvent.key === key 
+                })
+                
                 if(indexMatch !== -1){
                     currWageArray.splice(indexMatch, 1)
                 }
     
-                return currWageArray;
+                //return currWageArray;
+                console.log(currWageArray)
             }
 
-            this._regularWageEventArray = removeFromRegularWageArray(this._initialRegularWageEventArray, e.detail)
+            removeFromRegularWageArray(this.regular_wage_events, e.detail)
+
+            
         }
 
         this.dispatchEvent(new CustomEvent('get-regular-event-array', {
-            detail: this._regularWageEventArray,
+            detail: this.regular_wage_events,
             bubbles: true,
             composed: true
         }))
 
         //Section error handling:
 
-        this._regularWageEventArray.forEach((wageEvent) => {
+        this.regular_wage_events.forEach((wageEvent) => {
             if ((wageEvent.wage_event_type === 'hourly increase' || wageEvent.wage_event_type === 'hourly decrease') && wageEvent.starting_value === null){
                 this.section_notes = FieldLabels.Errors.StartingHourlyMissing;
             }

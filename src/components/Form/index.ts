@@ -72,7 +72,6 @@ export class UnitForm extends LitElement {
     modal : boolean = false;
 
     protected render() {
-        console.log(this.modal)
         return html`
             <status-bar @initiate-form-upload=${this._openModalForSubmission}></status-bar>
             <form>
@@ -105,8 +104,6 @@ export class UnitForm extends LitElement {
                              @get-wage-status=${this._setWageStatus}
                              @get-unit-status=${this._setUnitStatusData}
                              @get-bargaining-status=${this._setBargainingStatus}
-                             .RegularWageEvent=${this.form_data?.regular_wage_events}
-                             .SpecialWageEvent=${this.form_data?.special_wage_events}
                              @get-feedback=${this._setUserFeedback}
                              @get-regular-event-array=${this._setRegularWageData}
                              @get-special-event-array=${this._setSpecialWageData}
