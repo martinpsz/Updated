@@ -45,7 +45,7 @@ export class UnitElement extends LitElement {
 
         .unit-contract-meta h1{
             font-size: 1.2em;
-            margin: 0.25em 0;
+            margin: 0 0 0.25em 0;
         }
 
         @media (min-width: 1024px){
