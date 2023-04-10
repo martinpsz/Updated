@@ -17,20 +17,32 @@ export class UnitList extends LitElement {
 
     @property()
     searchTerm: string = '';
+
+    @property()
+    filterBy: string = 'all';
     
     protected render() {
+        console.log('Search on the following conditions', this.searchTerm, this.filterBy)
         return html`
             <unit-container 
                 .unit_data=${processedData}
-                searchTerm=${this.searchTerm}>
+                searchTerm=${this.searchTerm}
+                filterBy=${this.filterBy}>
             </unit-container>
-            <unit-menu @filter-by-search-term=${this._setSearchFilter}></unit-menu>
+            <unit-menu @filter-by-search-term=${this._setSearchTerm}
+                       @filter-by-filter-term=${this._setSearchFilter}>
+            </unit-menu>
         `
     }
 
-    _setSearchFilter = (e: CustomEvent) => {
-        this.searchTerm = e.detail
+    _setSearchTerm = (e: CustomEvent) => {
+        this.searchTerm = e.detail.toLowerCase()
     }
+
+    _setSearchFilter = (e: CustomEvent) => {
+        this.filterBy = e.detail.toLowerCase()
+    }
+
 
 }
 

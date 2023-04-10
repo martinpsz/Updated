@@ -117,6 +117,9 @@ export class UnitContainer extends LitElement {
 
     @property()
     searchTerm: string = '';
+
+    @property()
+    filterBy: string = 'all';
     
     constructor(){
         super()

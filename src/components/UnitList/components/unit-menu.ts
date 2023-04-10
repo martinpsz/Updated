@@ -78,16 +78,16 @@ export class UnitMenu extends LitElement {
             <div class=filter>
                 <span>Filter by:</span>
                 <div class="filter-option">
-                    <input type="radio" name="filter" id="all" value="all" checked>
+                    <input type="radio" name="filter" id="all" value="all" checked @input=${this._setFilterTerm}>
                     <label for="all">All</label>
                 
-                    <input type="radio" name="filter" id="review" value="review">
+                    <input type="radio" name="filter" id="review" value="review" @input=${this._setFilterTerm}>
                     <label for="review">Review Needed</label>
               
-                    <input type="radio" name="filter" id="ready" value="ready">
+                    <input type="radio" name="filter" id="ready" value="ready" @input=${this._setFilterTerm}>
                     <label for="ready">Ready for Submission</label>
              
-                    <input type="radio" name="filter" id="submitted" value="submitted">
+                    <input type="radio" name="filter" id="submitted" value="submitted" @input=${this._setFilterTerm}>
                     <label for="submitted">Submitted</label>
                 </div>
             </div>
@@ -101,6 +101,16 @@ export class UnitMenu extends LitElement {
         
         this.dispatchEvent(new CustomEvent("filter-by-search-term", {
             detail: searchTerm,
+            bubbles: true,
+            composed: true
+        }))
+    }
+
+    _setFilterTerm = (e: InputEvent) => {
+        const filterTerm = (e.target as HTMLInputElement).value;
+        
+        this.dispatchEvent(new CustomEvent("filter-by-filter-term", {
+            detail: filterTerm,
             bubbles: true,
             composed: true
         }))
