@@ -81,7 +81,7 @@ export class UnitForm extends LitElement {
                         <div id="modal-content">
                             <p>Are you sure you want to submit the complete Minimum Dues report for ${this.form_data.unit_name}?</p>
                             <div id="modal-buttons">
-                                <button-comp buttonText="Yes" primary icon="bi:hand-thumbs-up" @click=${this._handleSubmission}></button-comp>
+                                <button-comp buttonText="Yes" primary icon="bi:hand-thumbs-up" @click={#Add func}></button-comp>
                                 <button-comp buttonText="No" icon="bi:hand-thumbs-down" @click=${this._closeModalForSubmission}></button-comp>
                             </div>
                         </div>
