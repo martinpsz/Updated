@@ -132,7 +132,6 @@ export class SpecialEvent extends LitElement {
 
 
     protected render(){
-        console.log('The event type is: ', this.wage_event_type)
         return html`
             <div class="wage-event special-raise" key=${this.SpecialWageEvent.key}>
                 <input-field label=${FieldLabels.RaiseFields.EffectiveDate} 

@@ -1,6 +1,8 @@
 import { LitElement, html, css } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import {FieldLabels} from '../../config/settings.json';
+import { contactList } from "../../entry/index";
+
 
 @customElement('reporter-fields')
 export class ReporterFields extends LitElement {
@@ -25,8 +27,10 @@ export class ReporterFields extends LitElement {
     @property()
     phone!: string;
 
+    
 
     protected render() {
+        //console.log(this.autoFillFields('Carla'))
         let {Header, Reporter, Email, Phone} = FieldLabels.Reporter;
         return html`
             <form-header title=${Header}></form-header>
@@ -53,12 +57,53 @@ export class ReporterFields extends LitElement {
         `
     }
 
+
+    
+        
+
+            /*
+            for(let contact in contactList){
+                if(contact.startsWith(searchString.join(''))){
+                    this.reporter = contact;
+                    this.email = contactList[contact].email;
+                    this.phone = contactList[contact].phone;
+                }
+            }*/
+        //}
+
+        /*for (let contact in contactList){
+            if(contact.startsWith(e.key)){
+                this.reporter = contact;
+                this.email = contactList[contact].email;
+                this.phone = contactList[contact].phone;
+            }
+        }*/
+    
+
     _setReporterFields = (e: CustomEvent) =>{
         const {label, value} = e.detail;
+
+        const autoFill = (searchString: string): string => {
+            this.reporter = ''
+            this.email = ''
+            this.phone = ''
+
+            for (let contact in contactList){
+                if(contact.startsWith(searchString)){
+                    this.reporter = contact;
+                    this.email = contactList[contact].email;
+                    this.phone = contactList[contact].phone;
+                } else {
+                    this.reporter = searchString;
+                }
+            }
+
+            return this.reporter;
+        }
         
         switch(label){
             case 'Full Name':
-                this.reporter = value;
+                this.reporter = autoFill(value);
                 break;
             case 'Email':
                 this.email = value;
