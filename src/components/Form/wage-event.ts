@@ -149,7 +149,7 @@ export class WageEvent extends LitElement {
                 ${this.wage_event_type === "% increase" || this.wage_event_type === "% decrease" ? html`
                     <div class="field-with-span" id="raise-amount">
                         <input-field label=${this.wage_event_type} 
-                                     type="number"
+                                     type="text"
                                      value=${this.wage_event_value}
                                     @get-debounced-value=${(e:CustomEvent) => this._update_wage_event(e, 'wage_event_value')}
                                      >
@@ -159,7 +159,7 @@ export class WageEvent extends LitElement {
                 ` : html`
                     <div class="field-with-span" id="raise-amount">
                         <input-field label=${this.wage_event_type} 
-                                     type="number"
+                                     type="text"
                                      value=${this.wage_event_value}
                                     @get-debounced-value=${(e:CustomEvent) => this._update_wage_event(e, 'wage_event_value')}
                                      >
@@ -168,7 +168,7 @@ export class WageEvent extends LitElement {
                     </div>
                     <div class="field-with-span" id="starting-wage">
                         <input-field label=${this.wage_event_type === 'lump sum/bonus' ? 'Starting Annual' : 'Starting Hourly'} 
-                        type="number"
+                        type="text"
                         value=${this.starting_value}
                         @get-debounced-value=${(e: CustomEvent) => this._update_wage_event(e, 'starting_pay')}>
                         </input-field>
@@ -181,7 +181,6 @@ export class WageEvent extends LitElement {
     }
 
     _removeRaiseFromWageArray = () => {
-        console.log(this.key)
         this.dispatchEvent(new CustomEvent('remove-raise', {
             detail: this.key,
             bubbles: true,

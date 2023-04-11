@@ -85,7 +85,7 @@ export class MinimumDues extends LitElement {
             bargaining_status: null,
             cba_file : new File([], ''),
             comment: '',
-            regular_wage_events: [] ,
+            regular_wage_events: [{key: '0', effective_date: '', wage_event_type: '% increase', wage_event_value: null, starting_value: null} as WageEventInterface] ,
             special_wage_events: [],
             filing_status: 'Needs Review' as FormPayload['filing_status'],
             notes: ''

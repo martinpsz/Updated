@@ -50,7 +50,7 @@ export class UnitStatus extends LitElement {
     comment!: string;
 
     @property()
-    RegularWageEvent!: WageEventInterface;
+    regular_wage_events: Array<WageEventInterface> = [];
 
     @property()
     SpecialWageEvent!: WageEventInterface;
@@ -80,7 +80,6 @@ export class UnitStatus extends LitElement {
 
 
     protected render() {
-        
         let {Header, QuestionActive, MemberCount, ContractDates, CBAUpload, QuestionWages, QuestionBargaining} = FieldLabels.UnitStatus;
         return html`
             <form-header title=${Header} warning=${this.section_notes}></form-header>
@@ -123,7 +122,7 @@ export class UnitStatus extends LitElement {
                         </radio-prompt>
                         <comment-submit .value=${this.comment}></comment-submit>
                     ` : html`
-                            <wage-section .RegularWageEvent=${this.RegularWageEvent}
+                            <wage-section .regular_wage_events=${this.regular_wage_events}
                                           .SpecialWageEvent=${this.SpecialWageEvent}>
                             </wage-section>
                             <comment-submit .value=${this.comment}></comment-submit>

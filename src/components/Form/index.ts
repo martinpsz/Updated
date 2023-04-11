@@ -72,6 +72,7 @@ export class UnitForm extends LitElement {
     modal : boolean = false;
 
     protected render() {
+        console.log('this is what the form has for reg wage events', this.form_data?.regular_wage_events)
         return html`
             <status-bar @initiate-form-upload=${this._openModalForSubmission}></status-bar>
             <form>
@@ -100,6 +101,7 @@ export class UnitForm extends LitElement {
                              contractStartDate=${this.form_data?.agreement_eff_date}
                              contractEndDate=${this.form_data?.agreement_exp_date}
                              .cba_file=${this.form_data?.cba_file}
+                             .regular_wage_events=${this.form_data?.regular_wage_events}
                              @get-inactive-status=${this._setInactiveStatus}
                              @get-wage-status=${this._setWageStatus}
                              @get-unit-status=${this._setUnitStatusData}
