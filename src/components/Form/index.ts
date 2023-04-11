@@ -6,6 +6,7 @@ import '../Form/reporter-fields';
 import '../Form/unit-status';
 import '../Form/status-bar'
 import { FormPayload} from "../../interfaces/interface.js";
+import { Key } from "readline";
 
 
 @customElement('unit-form')
@@ -72,7 +73,7 @@ export class UnitForm extends LitElement {
     modal : boolean = false;
 
     protected render() {
-        console.log('this is what the form has for reg wage events', this.form_data?.regular_wage_events)
+
         return html`
             <status-bar @initiate-form-upload=${this._openModalForSubmission}></status-bar>
             <form>
@@ -102,6 +103,8 @@ export class UnitForm extends LitElement {
                              contractEndDate=${this.form_data?.agreement_exp_date}
                              .cba_file=${this.form_data?.cba_file}
                              .regular_wage_events=${this.form_data?.regular_wage_events}
+                             .special_wage_events=${this.form_data?.special_wage_events}
+                             .comment=${this.form_data?.comment}
                              @get-inactive-status=${this._setInactiveStatus}
                              @get-wage-status=${this._setWageStatus}
                              @get-unit-status=${this._setUnitStatusData}
@@ -109,7 +112,8 @@ export class UnitForm extends LitElement {
                              @get-feedback=${this._setUserFeedback}
                              @get-regular-event-array=${this._setRegularWageData}
                              @get-special-event-array=${this._setSpecialWageData}
-                             @comment-toggle=${this._setCommentToggle}>
+                             @comment-toggle=${this._setCommentToggle}
+                             @save-form=${this._saveForm}>
                 </unit-status>
             </form>
         `
@@ -174,11 +178,37 @@ export class UnitForm extends LitElement {
 
     _setCommentToggle = (e: CustomEvent) => {
         if (e.detail === 'No'){
-            this.form_data = {...this.form_data, comment: null}
+            this.form_data = {...this.form_data, comment: ''}
         }
     }
 
+    _saveForm = () => {
+        //Function saves form data to local storage
 
+        const sessionData = JSON.parse(window.sessionStorage.getItem('savedForm') as string)
+        
+
+        if (sessionData === null) {
+            window.sessionStorage.setItem('savedForm', JSON.stringify(this.form_data))
+        } else if (sessionData.hasOwnProperty('unit_id')){
+            const updatedForm = [sessionData, this.form_data]
+            window.sessionStorage.setItem('savedForm', JSON.stringify(updatedForm))
+        } else {
+            const updatedForm = [...sessionData, this.form_data]
+            window.sessionStorage.setItem('savedForm', JSON.stringify(updatedForm))
+        }
+        
+        /*if (sessionData !== null && sessionData.isArray()){
+            const updatedForm = [...sessionData, this.form_data]
+            window.sessionStorage.setItem('savedForm', JSON.stringify(updatedForm))
+        } else if (sessionData !== null && sessionData.isObject()){
+            const updatedForm = [sessionData, this.form_data]
+            window.sessionStorage.setItem('savedForm', JSON.stringify(updatedForm))
+        } else {
+            window.sessionStorage.setItem('savedForm', JSON.stringify(this.form_data))
+        }*/
+        
+    }
     
 }
 

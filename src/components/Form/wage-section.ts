@@ -1,5 +1,5 @@
-import { LitElement, html, css, nothing, TemplateResult, PropertyValueMap} from "lit";
-import { customElement, state, property} from "lit/decorators.js";
+import { LitElement, html, css} from "lit";
+import { customElement, property} from "lit/decorators.js";
 import '../Form/form-header';
 import './wage-event';
 import './special-section'
@@ -30,21 +30,17 @@ export class WageSection extends LitElement {
     
     `
 
-    //@property()
-    //RegularWageEvent!: WageEventInterface;
-
-    @property()
-    SpecialWageEvent!: WageEventInterface;
-
     @property()
     section_notes!: string;
 
     @property()
     regular_wage_events!: Array<WageEventInterface>;
 
+    @property()
+    special_wage_events!: Array<WageEventInterface>;
+
 
     protected render() {
-        console.log('This is what wage section has for regular wage events', this.regular_wage_events)
         return html`
             <form-header title=${FieldLabels.AcrossTheBoard.Header} warning=${this.section_notes}></form-header>
           ${this.regular_wage_events?.map((wageEvent: WageEventInterface) => {
@@ -74,7 +70,7 @@ export class WageSection extends LitElement {
             @click=${this._addRegularRaise}
             icon="ic:baseline-add-chart">
             </button-comp>
-            <special-section .SpecialWageEvent=${this.SpecialWageEvent}></special-section>
+            <special-section .special_wage_events=${this.special_wage_events}></special-section>
         `
     }
 

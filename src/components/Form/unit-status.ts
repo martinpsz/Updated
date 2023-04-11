@@ -44,7 +44,7 @@ export class UnitStatus extends LitElement {
     contractEndDate!: string;
 
     @property({type: File})
-    cba_file!: File;
+    cba_file: File = new File([], '');
 
     @property({type: String})
     comment!: string;
@@ -53,7 +53,7 @@ export class UnitStatus extends LitElement {
     regular_wage_events: Array<WageEventInterface> = [];
 
     @property()
-    SpecialWageEvent!: WageEventInterface;
+    special_wage_events: Array<WageEventInterface> = [];
 
     @property()
     section_notes!: string;
@@ -107,7 +107,7 @@ export class UnitStatus extends LitElement {
                         </input-field>
                         <input-field label=${CBAUpload} 
                                      type="file"
-                                     value=${this.cba_file?.name}
+                                     value=${this.cba_file}
                                      @get-onchange-value=${(e: CustomEvent) => this._setUnitStatusFields(e)}>
                         </input-field>
                     </div>
@@ -120,14 +120,14 @@ export class UnitStatus extends LitElement {
                                       initialChecked="No"
                                       @get-prompt-toggle-selection=${(e: CustomEvent) => this._setBargainingStatus(e, QuestionBargaining)}>
                         </radio-prompt>
-                        <comment-submit .value=${this.comment}></comment-submit>
+                        <comment-submit comment=${this.comment}></comment-submit>
                     ` : html`
                             <wage-section .regular_wage_events=${this.regular_wage_events}
-                                          .SpecialWageEvent=${this.SpecialWageEvent}>
+                                          .special_wage_events=${this.special_wage_events}>
                             </wage-section>
-                            <comment-submit .value=${this.comment}></comment-submit>
+                            <comment-submit comment=${this.comment}></comment-submit>
                             `}
-                ` : html`<comment-submit .value=${this.comment}></comment-submit>`}
+                ` : html`<comment-submit comment=${this.comment}></comment-submit>`}
             </div>
         `
     }

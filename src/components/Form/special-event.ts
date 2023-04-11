@@ -1,4 +1,4 @@
-import {LitElement, html, css, nothing, TemplateResult}  from 'lit';
+import {LitElement, html, css}  from 'lit';
 import {customElement, property} from 'lit/decorators.js';
 import '../atoms/input-field';
 import '../atoms/raise-select';
@@ -133,7 +133,7 @@ export class SpecialEvent extends LitElement {
 
     protected render(){
         return html`
-            <div class="wage-event special-raise" key=${this.SpecialWageEvent.key}>
+            <div class="wage-event special-raise" key=${this.key}>
                 <input-field label=${FieldLabels.RaiseFields.EffectiveDate} 
                              type='date'
                              value=${this.effective_date}
@@ -148,7 +148,7 @@ export class SpecialEvent extends LitElement {
                 ${this.wage_event_type === "% increase" || this.wage_event_type === "% decrease" ? html`
                     <div class="field-with-span" id="raise-amount">
                         <input-field label=${this.wage_event_type} 
-                                     type="number"
+                                     type="text"
                                      value=${this.wage_event_value}
                                     @get-debounced-value=${(e:CustomEvent) => this._update_special_event(e, 'wage_event_value')}
                                      >
@@ -158,7 +158,7 @@ export class SpecialEvent extends LitElement {
                 ` : html`
                     <div class="field-with-span" id="raise-amount">
                         <input-field label=${this.wage_event_type} 
-                                     type="number"
+                                     type="text"
                                      value=${this.wage_event_value}
                                     @get-debounced-value=${(e:CustomEvent) => this._update_special_event(e, 'wage_event_value')}
                                      >
@@ -167,7 +167,7 @@ export class SpecialEvent extends LitElement {
                     </div>
                     <div class="field-with-span" id="starting-wage">
                         <input-field label=${this.wage_event_type === 'lump sum/bonus' ? 'Starting Annual' : 'Starting Hourly'} 
-                        type="number"
+                        type="text"
                         value=${this.starting_value}
                         @get-debounced-value=${(e: CustomEvent) => this._update_special_event(e, 'starting_pay')}>
                         </input-field>
@@ -252,11 +252,7 @@ export class SpecialEvent extends LitElement {
         return dateVal
     }
 
-   
-
     _removeRaiseFromWageArray = () =>{
-        this.remove()
-        
         this.dispatchEvent(new CustomEvent('remove-raise', {
             detail: this.key,
             bubbles: true,
@@ -264,11 +260,6 @@ export class SpecialEvent extends LitElement {
         }));
     }
 
-   
-
-    
-    
-    
 }
 
 declare global {

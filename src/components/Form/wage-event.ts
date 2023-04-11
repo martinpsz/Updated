@@ -1,5 +1,5 @@
-import {LitElement, html, css, nothing, TemplateResult}  from 'lit';
-import {customElement, property, state} from 'lit/decorators.js';
+import {LitElement, html, css}  from 'lit';
+import {customElement, property} from 'lit/decorators.js';
 import '../atoms/input-field';
 import '../atoms/raise-select';
 import './form-header';
@@ -7,7 +7,7 @@ import '../atoms/button-comp';
 import {FieldLabels} from '../../config/settings.json';
 import {WageEventInterface} from '../../interfaces/interface.js';
 import {wageValueAdjusted} from '../Form/utilities/wageValueAdjusted.js';
-import { debounce } from '../../utilities/debounce.js';
+
 
 @customElement('wage-event')
 export class WageEvent extends LitElement {
@@ -120,21 +120,12 @@ export class WageEvent extends LitElement {
     starting_value!: WageEventInterface['starting_value'];
 
     @property()
-    num_affected!: WageEventInterface['num_affected'];
-
-    @property()
-    description!: WageEventInterface['description'];
-
-    @property()
-    supporting_doc!: WageEventInterface['supporting_doc'];
-
-    @property()
     RegularWageEvent!: WageEventInterface;
 
 
     protected render(){
         return html`
-            <div class="wage-event" key=${this.RegularWageEvent?.key}>
+            <div class="wage-event" key=${this.key}>
                 <input-field label=${FieldLabels.RaiseFields.EffectiveDate} 
                              type='date'
                              value=${this.effective_date}

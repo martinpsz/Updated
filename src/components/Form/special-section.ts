@@ -29,28 +29,23 @@ export class SpecialSection extends LitElement {
     @state()
     _specialRaise = false;
 
-    @state()
-    _specialRaiseArray: Array<TemplateResult> = []; // holds templates added on click of add new special raise
+    //@state()
+    //_specialRaiseArray: Array<TemplateResult> = []; // holds templates added on click of add new special raise
 
-    @state()
-    _initialSpecialWageEventArray: Array<WageEventInterface> = []; //Provides a starting proint for collect wage events.
+    //@state()
+    //_initialSpecialWageEventArray: Array<WageEventInterface> = []; //Provides a starting proint for collect wage events.
 
-    @state()
-    _specialWageEventArray: Array<WageEventInterface> = []; //New wage events that are added to the initial array.
+    //@state()
+   // _specialWageEventArray: Array<WageEventInterface> = []; //New wage events that are added to the initial array.
+
+    //@property()
+    //SpecialWageEvent!: WageEventInterface;
 
     @property()
-    SpecialWageEvent!: WageEventInterface;
+    special_wage_events!: Array<WageEventInterface>;
 
     @property()
     section_notes!: string;
-
-    constructor(){
-        super()
-
-        this._initialSpecialWageEventArray = [{key: '0', effective_date: '', wage_event_type: '% increase', wage_event_value: null, starting_value: null,
-        num_affected: null, description: '', supporting_doc: new File([], '')}]
-    }
-
 
     protected render() {
         let {Header, QuestionSpecialRaise} = FieldLabels.SpecialIncreases;
@@ -58,45 +53,68 @@ export class SpecialSection extends LitElement {
             <form-header title=${Header} warning=${this.section_notes}></form-header>
             <div>
                 <radio-prompt prompt=${QuestionSpecialRaise}
-                              @get-toggle-selection=${this._setSpecialRaise}>
+                @get-toggle-selection=${this._setSpecialRaise}>
                 </radio-prompt>
-                ${this._specialRaise ? html`<special-event id="first" key='0' .SpecialWageEvent=${this.SpecialWageEvent} @get-special-event-data=${(e: CustomEvent) => this._setSpecialWageEvent(e, 'ADD-RAISE')}></special-event>
-                ${this._specialRaiseArray.map(item => item)}
-                <button-comp buttonText=${FieldLabels.RaiseFields.AddSpecialRaise} 
-                primary
-                @click=${this._addSpecialRaise}
-                icon="ic:baseline-add-chart">
-                </button-comp>
+                ${this._specialRaise ? 
+                    this.special_wage_events?.map((wageEvent: WageEventInterface) => {
+                        return wageEvent.key === '0' ? 
+                        html`
+                            <special-event key=${wageEvent.key}
+                                id='first'
+                                effective_date=${wageEvent.effective_date}
+                                wage_event_type=${wageEvent.wage_event_type}
+                                wage_event_value=${wageEvent.wage_event_value}
+                                starting_value=${wageEvent.starting_value}
+                                num_affected=${wageEvent.num_affected}
+                                description=${wageEvent.description}
+                                supporting_doc=${wageEvent.supporting_doc}
+                                @get-special-event-data=${(e: CustomEvent) => this._setSpecialWageEvent(e, 'ADD-RAISE')}
+                            </special-event>
+                        `: html`
+                            <special-event key=${wageEvent.key}
+                                effective_date=${wageEvent.effective_date}
+                                wage_event_type=${wageEvent.wage_event_type}
+                                wage_event_value=${wageEvent.wage_event_value}
+                                starting_value=${wageEvent.starting_value}
+                                @get-special-event-data=${(e: CustomEvent) => this._setSpecialWageEvent(e, 'ADD-RAISE')}
+                                @remove-raise=${(e: CustomEvent) => this._setSpecialWageEvent(e, 'REMOVE-RAISE')}>
+                            </special-event>
+                        `
+                    }
+                    ): nothing}
+                ${this._specialRaise ? html`
+                    <button-comp buttonText=${FieldLabels.RaiseFields.AddSpecialRaise} 
+                    primary
+                    @click=${this._addSpecialRaise}
+                    icon="ic:baseline-add-chart">
+                    </button-comp>
                 ` : nothing}
             </div>
-
+        
+        
         `
+
+
     }
 
     _setSpecialRaise = (e: CustomEvent) => {
         this._specialRaise = e.detail === 'Yes' ? true : false;
 
         if(this._specialRaise === false){
-            this._specialRaiseArray = [];
-            this._specialWageEventArray = [];
+            this.special_wage_events = [{key: '0', effective_date: '', wage_event_type: '% increase', wage_event_value: null, starting_value: null, num_affected: null, description: '', supporting_doc: new File([], '')} as WageEventInterface];
             this.section_notes = '';
         }
     }
 
+
     _addSpecialRaise = () => {
-        let key = this._specialRaiseArray.length + 1;
-
-        this._specialWageEventArray.push({key: key.toString(), effective_date: '', wage_event_type: '% increase', wage_event_value: null, starting_value: null,
-        num_affected: null, description: '', supporting_doc: new File([], '')})
-
-        const newSpecialRaise = html`<special-event id=${key} key=${key} .SpecialWageEvent=${this._specialWageEventArray} @get-special-event-data=${(e: CustomEvent) => this._setSpecialWageEvent(e, 'ADD-RAISE')} @remove-raise=${(e: CustomEvent) => this._setSpecialWageEvent(e, 'REMOVE-RAISE')}></special-event>`
-
-        this._specialRaiseArray = [...this._specialRaiseArray, newSpecialRaise]
+        this.special_wage_events = [...this.special_wage_events, {key: this.special_wage_events.length.toString(), effective_date: '', wage_event_type: '% increase', wage_event_value: null, starting_value: null, num_affected: null, description: '', supporting_doc: new File([], '')}]
     }
+
 
     _setSpecialWageEvent = (e: CustomEvent, typeOfEvent: 'ADD-RAISE' | 'REMOVE-RAISE') => {
         if (typeOfEvent === 'ADD-RAISE'){
-            const addToRegularWageArray = (currWageArray: Array<WageEventInterface>, newWageEvent: WageEventInterface) => {
+            const addToSpecialWageArray = (currWageArray: Array<WageEventInterface>, newWageEvent: WageEventInterface) => {
 
                 const indexMatch = currWageArray.findIndex(wageEvent => wageEvent.key === newWageEvent.key)
     
@@ -109,32 +127,31 @@ export class SpecialSection extends LitElement {
                 return currWageArray;
             }
     
-            this._specialWageEventArray = addToRegularWageArray(this._initialSpecialWageEventArray, e.detail)
+            this.special_wage_events = addToSpecialWageArray(this.special_wage_events, e.detail)
         }
 
         if (typeOfEvent === 'REMOVE-RAISE'){
-            const removeFromRegularWageArray = (currWageArray: Array<WageEventInterface>, key: string) => {
-                const indexMatch = currWageArray.findIndex(wageEvent => wageEvent.key === key)
-    
-                if(indexMatch !== -1){
-                    currWageArray.splice(indexMatch, 1)
-                }
-    
-                return currWageArray;
+            const removeFromSpecialWageArray = (currWageArray: Array<WageEventInterface>, key: string) => {
+                
+                const newCurrWageArray = currWageArray.filter(wageEvent => wageEvent.key !== key)
+
+                return newCurrWageArray;
+   
             }
 
-            this._specialWageEventArray = removeFromRegularWageArray(this._initialSpecialWageEventArray, e.detail)
+            this.special_wage_events = removeFromSpecialWageArray(this.special_wage_events, e.detail)
         }
 
         this.dispatchEvent(new CustomEvent('get-special-event-array', {
-            detail: this._specialWageEventArray,
+            detail: this.special_wage_events,
             bubbles: true,
             composed: true
         }))
 
+
         //Section error handling:
 
-        this._specialWageEventArray.forEach((wageEvent) => {
+        this.special_wage_events.forEach((wageEvent) => {
             console.log(wageEvent)
             if ((wageEvent.wage_event_type === 'hourly increase' || wageEvent.wage_event_type === 'hourly decrease') && wageEvent.starting_value === null){
                 this.section_notes = FieldLabels.Errors.StartingHourlyMissing;
@@ -149,10 +166,10 @@ export class SpecialSection extends LitElement {
             }
     
         })
-        
-    }
 
+    }   
 }
+
 
 declare global {
     interface HTMLElementTagNameMap {

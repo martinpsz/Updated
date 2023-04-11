@@ -41,6 +41,9 @@ export class TextArea extends LitElement {
     @state()
     _comments = 'Yes'
 
+    @property({type: String})
+    comment!: string;
+
 
     protected render() {
         let {Header, QuestionComments} = FieldLabels.Comments;
@@ -50,8 +53,8 @@ export class TextArea extends LitElement {
                           initialChecked='Yes'
                           @get-toggle-selection=${this._setToggleSelection}>
             </radio-prompt>
-            ${this._comments === 'Yes' ? html`<textarea placeholder="Enter your comments here" @input=${debounce(this._getFeedback)}></textarea>` : nothing}
-            <button-comp buttonText="Save This Report" icon="material-symbols:attach-file-add-rounded"></button-comp>
+            ${this._comments === 'Yes' ? html`<textarea placeholder="Enter your comments here" .value=${this.comment} @input=${debounce(this._getFeedback)}></textarea>` : nothing}
+            <button-comp buttonText="Save This Report" icon="material-symbols:attach-file-add-rounded" @click=${this._saveReport}></button-comp>
         `
     }
 
@@ -72,6 +75,15 @@ export class TextArea extends LitElement {
             composed: true
         }))
     }
+
+    _saveReport = () => {
+        this.dispatchEvent(new CustomEvent('save-form', {
+            bubbles: true,
+            composed: true
+        }))
+    }
+
+
 }
 
 declare global {

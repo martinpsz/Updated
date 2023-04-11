@@ -149,7 +149,7 @@ export class InputField extends LitElement {
     _getOnChangeInput = (e: InputEvent) => {
         const inputTarget = e.target as HTMLInputElement;
         const inputValue = inputTarget.value;
-        const inputFile = inputTarget.type === 'file' ? inputTarget.files : '';
+        const inputFile = inputTarget.type === 'file' ? inputTarget.files : new File([], '');
 
         this.dispatchEvent(new CustomEvent('get-onchange-value', {
             detail: {
