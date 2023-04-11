@@ -181,9 +181,7 @@ export class WageEvent extends LitElement {
     }
 
     _removeRaiseFromWageArray = () => {
-        this.remove()
-        
-
+        console.log(this.key)
         this.dispatchEvent(new CustomEvent('remove-raise', {
             detail: this.key,
             bubbles: true,
